@@ -25,9 +25,9 @@ Los estudiantes conocen nociones iniciales de algoritmos, cálculo, vectores y m
 
 ## Checklist
 
-- [ ] T1 — Diseñar y crear el notebook acumulativo. Ruta: delegada. Motivo: escritura pedagógica y técnica no trivial.
-- [ ] T2 — Ejecutar el notebook desde cero y verificar resultados, ejercicios y seguridad. Ruta: delegada. Motivo: verificación de ejecución.
-- [ ] T3 — Confirmar la alternativa actual de AWS SageMaker para laboratorios individuales y documentar el tradeoff en la entrega. Ruta: delegada. Motivo: investigación externa actual.
+- [x] T1 — Diseñar y crear el notebook acumulativo. Ruta: delegada. Evidencia: `notebooks/de-neuronas-a-agentes-seguros.ipynb`, 55 celdas y agenda 120 + 120 minutos.
+- [x] T2 — Ejecutar el notebook desde cero y verificar resultados, ejercicios y seguridad. Ruta: delegada. Evidencia: 33 celdas de código ejecutadas en orden; 9 intentos auditados; hash final verificado; sin excepciones ni errores almacenados.
+- [x] T3 — Confirmar la alternativa actual de AWS SageMaker para laboratorios individuales y documentar el tradeoff en la entrega. Ruta: delegada. Evidencia: documentación oficial confirma que Studio Lab no acepta nuevos clientes y que SageMaker Studio con espacios JupyterLab e IAM Identity Center es la alternativa administrable.
 
 ## Criterios de aceptación
 
@@ -45,7 +45,8 @@ Los estudiantes conocen nociones iniciales de algoritmos, cálculo, vectores y m
 
 ## Estado
 
-- En progreso.
+- Implementación completa.
+- Verificación real con kernel Jupyter pendiente por ausencia de `jupyter`, `nbclient` y `nbconvert` en el entorno local; se ejecutó cada celda en un namespace Python limpio como comprobación proporcional.
 
 ## Entrega
 
@@ -53,6 +54,17 @@ Los estudiantes conocen nociones iniciales de algoritmos, cálculo, vectores y m
 - Forecast: más de 400 líneas JSON por la naturaleza del notebook; se considera un único artefacto pedagógico cohesivo.
 - Git: no disponible porque el directorio no es un repositorio.
 
+## Evidencia de verificación
+
+- Notebook válido: nbformat 4.5.
+- 55 celdas totales; 33 de código.
+- Sesiones: 120 + 120 = 240 minutos.
+- Ejecución secuencial completa con Python 3.12.14 y NumPy 2.3.5: PASS.
+- Matplotlib ausente: fallback opcional ejecutado correctamente.
+- Auditoría: 9 intentos, incluidos rechazos y confirmaciones requeridas.
+- SHA-256 final: verificado sobre el registro completo.
+- Git/RDD: no aplicables porque el directorio no es un repositorio Git.
+
 ## Próximo paso
 
-Crear el notebook y ejecutar la validación completa.
+Probar `Restart Kernel and Run All` en el entorno Jupyter/SageMaker definitivo y preparar la distribución a estudiantes.
