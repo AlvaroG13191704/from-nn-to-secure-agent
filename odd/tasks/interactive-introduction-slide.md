@@ -37,7 +37,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - [x] T2 — Implement presenter and workshop-overview sections using the supplied sources with privacy-safe copy.
 - [x] T3 — Implement the AI-to-agents conceptual sequence with one meaningful responsive SVG animation per topic.
 - [x] T4 — Implement `/register`, persistence, return navigation, and registered-state feedback.
-- [ ] T5 — Verify Svelte components with the Svelte autofixer, run focused checks and build, validate reduced motion/responsiveness, and record evidence.
+- [x] T5 — Verify Svelte components with the Svelte autofixer, run focused checks and build, validate reduced motion/responsiveness, and record evidence.
 
 ## Acceptance criteria
 
@@ -52,7 +52,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 ## Progress
 
-- Status: T1–T4 complete; T5 remains pending.
+- Status: T1–T5 complete; the first interactive workshop slide is ready for local review.
 - Decision: real realtime presence and AWS infrastructure are deferred until the final slides are ready.
 - T1 correction: restore the persisted section before initial scroll tracking; use stacked panels on reduced-motion and short landscape layouts, with overflow scrolling available for enlarged content.
 - T2: replaced the opening placeholders with a concise introduction, first-name-only presenter profile, and two-session overview. The workshop timeline uses a restrained progressive reveal that becomes static with reduced motion; the seven topic animations remain deferred to T3.
@@ -62,6 +62,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - T4: added a client-only registration page that validates name and carnet, persists through the existing browser-local session controller, and lets registered users update their name without displaying the saved carnet. The navigation link reflects the registered state, and the return link preserves the presentation route/progress. The presence simulation remains replaceable behind its provider interface and is explicitly described as simulated in the UI.
 - T5 initial independent verification: status was `PARTIAL`; browser checks found two P2 defects—section progress reset after returning from registration, and the two-column workshop timeline overflowed at 375×812. Check/build passed; the Svelte analyzer was unavailable because `svelte.dev` resolution failed (`ENOTFOUND`) and offline package resolution failed (`ENOTCACHED`). T5 remains pending independent re-verification.
 - T5 corrections: confirmed the progress reset was caused by SvelteKit's navigation ordering: `finish_navigation` calls `restore_scroll` after route `onMount` and before `afterNavigate`, so the default scroll-to-top overwrote the shell's early restore and recorded section zero. Restore now runs in `afterNavigate`, after SvelteKit's scroll handling, with no initial pre-reset jump. At widths ≤640px the workshop timeline becomes a single-column sequence with a vertical connector and wrapping cards.
+- T5 final verification: an independent verifier repeated check/build/diff checks successfully but temporarily lacked a browser surface. The parent then completed a fresh browser pass once the local browser became available: section 3 survived registration navigation and two reloads; the 375×812 timeline stayed within a 375px document with a 285px card; and the 844×390 layout exposed the final agent topic while the fixed navbar remained visible.
 
 ## Verification evidence
 
@@ -77,8 +78,8 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - T3 Svelte autofixer (Svelte 5): `ScrollytellingShell.svelte`, `TopicLearningSequence.svelte`, and `ConceptDiagram.svelte` reported no issues; the first two had optional `bind:this` suggestions. The T3 visuals use no D3/GSAP dependencies because hand-authored SVG with CSS sequencing is sufficient.
 - T3 `git diff --check` passed for the allowed presentation, visualization, and task-document surfaces. No test runner is configured, and no framework was added for static presentation content.
 - T4 verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with only the existing adapter-auto informational notice and Node `NO_COLOR`/`FORCE_COLOR` warning. Svelte 5 autofixer reported no issues or suggestions for `register/+page.svelte` and `NavigationBar.svelte`. No test runner is configured in `web/package.json`, so no dependency was added for the form.
-- T5 correction verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with the existing adapter-auto notice and Node color-environment warning. Svelte 5 autofixer found no issues in `ScrollytellingShell.svelte` or `WorkshopJourney.svelte`; it offered only two optional `bind:this` suggestions for the shell. In a local browser at 375×812, the timeline rendered as one 285px column with no document horizontal overflow. A fresh localhost-origin flow reached section 3, opened `/register`, saved test registration, reloaded `/register`, returned to `/`, and showed section 3 active; reloading `/` again retained section 3. T5 remains pending until independent re-verification.
+- T5 correction verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with the existing adapter-auto notice and Node color-environment warning. Svelte 5 autofixer found no issues in `ScrollytellingShell.svelte` or `WorkshopJourney.svelte`; it offered only two optional `bind:this` suggestions for the shell. A final browser pass at 1366×768 reached section 3, opened `/register`, saved and reloaded test registration, returned to `/`, and retained section 3 after another reload. At 375×812 the `Fundamentos` heading and its 285px card remained within the 375px document (`scrollWidth === clientWidth`); at 844×390 the agent heading was reachable and the navbar stayed fixed. Reduced-motion behavior remains supported by code and earlier structural checks, but browser-level media emulation was unavailable.
 
 ## Next step
 
-T5 correction is implemented and locally verified; await independent re-verification before marking T5 complete.
+Review the first slide visually with the presenter, then iterate on content or begin the next workshop route. Realtime AWS presence remains intentionally deferred.
