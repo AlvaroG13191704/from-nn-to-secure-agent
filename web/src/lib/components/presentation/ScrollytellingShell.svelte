@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { LocalSessionController } from '../../state/local-session.js';
 	import WorkshopJourney from './WorkshopJourney.svelte';
+	import TopicLearningSequence from './TopicLearningSequence.svelte';
 
 	let { localSession }: { localSession: LocalSessionController } = $props();
 	let shell = $state<HTMLElement>();
@@ -106,7 +107,8 @@
 			<div class="presentation-track" bind:this={track}>
 				{#each panels as panel, index (panel.id)}
 					<section class="presentation-panel" id={panel.id} aria-labelledby={`${panel.id}-title`} aria-roledescription="diapositiva" inert={!reducedMotion && activeIndex !== index}>
-						<div class="panel-card">
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<div class="panel-card" role="region" tabindex="0" aria-labelledby={`${panel.id}-title`}>
 							<p class="mb-5 font-semibold uppercase tracking-[0.16em] text-accent">{panel.eyebrow} <span class="text-muted">· {index + 1} de {panels.length}</span></p>
 							<h1 id={`${panel.id}-title`} class="max-w-4xl text-display font-bold tracking-tight text-ink">{panel.title}</h1>
 							<p class="mt-7 max-w-2xl text-reading text-muted">{panel.copy}</p>
@@ -128,6 +130,7 @@
 								</div>
 							{:else}
 								<WorkshopJourney active={activeIndex === index} reducedMotion={reducedMotion} />
+								<TopicLearningSequence active={activeIndex === index} {reducedMotion} />
 							{/if}
 							<div class="mt-10 flex flex-wrap items-center gap-3">
 								{#if index < panels.length - 1}
