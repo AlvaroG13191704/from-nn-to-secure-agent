@@ -54,12 +54,14 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 - Status: T1 complete; T2–T5 remain pending.
 - Decision: real realtime presence and AWS infrastructure are deferred until the final slides are ready.
+- T1 correction: restore the persisted section before initial scroll tracking; use stacked panels on reduced-motion and short landscape layouts, with overflow scrolling available for enlarged content.
 
 ## Verification evidence
 
 - `web/`: `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed. The adapter-auto informational message reported no production adapter detected.
 - Svelte autofixer (`@sveltejs/mcp svelte-autofixer`, Svelte 5) ran on all four changed Svelte files: no issues or suggestions for layout, home route, and navigation; presentation shell had no issues and two optional `bind:this` suggestions.
 - `git diff --check` passed for T1 source surfaces.
+- Correction verification: `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed; the presentation shell autofixer reported no issues and two optional `bind:this` suggestions. No test script is configured in `web/package.json`, so no new test dependency was added.
 
 ## Next step
 

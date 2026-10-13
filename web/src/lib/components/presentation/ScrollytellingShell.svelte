@@ -6,6 +6,8 @@
 	let shell = $state<HTMLElement>();
 	let track = $state<HTMLDivElement>();
 	let reducedMotion = $state(false);
+	let compactFallback = $state(false);
+	let verticalAccess = $derived(reducedMotion || compactFallback);
 	let lastProgress = -1;
 	let activeIndex = $state(0);
 	const panelIds = ['bienvenida', 'recorrido', 'aprendizaje'];
@@ -25,7 +27,7 @@
 
 	function updatePosition() {
 		if (!shell || !track) return;
-		if (reducedMotion) {
+		if (verticalAccess) {
 			const viewportCenter = window.innerHeight / 2;
 			const visibleIndex = panels.findIndex((panel) => {
 				const bounds = document.getElementById(panel.id)?.getBoundingClientRect();
@@ -44,8 +46,8 @@
 	}
 
 	function moveTo(index: number) {
-		if (reducedMotion) {
-			document.getElementById(panelIds[index])?.scrollIntoView({ behavior: 'instant' });
+		if (verticalAccess) {
+			document.getElementById(panelIds[index])?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' });
 			return;
 		}
 		const target = shell;
@@ -56,19 +58,41 @@
 	}
 
 	onMount(() => {
-		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-		const syncMotionPreference = () => {
-			reducedMotion = media.matches;
-			if (reducedMotion && track) track.style.transform = '';
-			updatePosition();
+		localSession.hydrate();
+		const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const compactViewport = window.matchMedia('(max-height: 700px) and (min-width: 641px)');
+		let initialized = false;
+		const restorePosition = (index: number) => {
+			if (verticalAccess) {
+				track && (track.style.transform = '');
+				document.getElementById(panelIds[index])?.scrollIntoView({ behavior: 'instant' });
+			} else if (shell) {
+				const ratio = index / (panels.length - 1);
+				const maxScroll = Math.max(0, shell.offsetHeight - window.innerHeight);
+				window.scrollTo({ top: shell.offsetTop + ratio * maxScroll, behavior: 'instant' });
+			}
+			requestAnimationFrame(updatePosition);
+		};
+		const syncLayout = () => {
+			const wasVertical = verticalAccess;
+			reducedMotion = motionPreference.matches;
+			compactFallback = compactViewport.matches;
+			if (initialized && wasVertical !== verticalAccess) restorePosition(activeIndex);
 		};
 		const handleScroll = () => requestAnimationFrame(updatePosition);
-		syncMotionPreference();
-		media.addEventListener('change', syncMotionPreference);
+		syncLayout();
+		const savedProgress = localSession.getSnapshot().progress;
+		activeIndex = savedProgress;
+		lastProgress = savedProgress;
+		restorePosition(savedProgress);
+		initialized = true;
+		motionPreference.addEventListener('change', syncLayout);
+		compactViewport.addEventListener('change', syncLayout);
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		window.addEventListener('resize', handleScroll);
 		return () => {
-			media.removeEventListener('change', syncMotionPreference);
+			motionPreference.removeEventListener('change', syncLayout);
+			compactViewport.removeEventListener('change', syncLayout);
 			window.removeEventListener('scroll', handleScroll);
 			window.removeEventListener('resize', handleScroll);
 		};
@@ -133,6 +157,7 @@
 	.presentation-panel {
 		display: grid;
 		width: 100vw;
+		height: 100%;
 		min-height: 100%;
 		place-items: center;
 		padding: clamp(1.25rem, 5vw, 5rem);
@@ -140,6 +165,8 @@
 
 	.panel-card {
 		width: min(100%, 76rem);
+		max-height: 100%;
+		overflow-y: auto;
 		padding: clamp(1.5rem, 5vw, 5rem);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-panel);
@@ -147,7 +174,7 @@
 		box-shadow: var(--shadow-panel);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
+	@media (prefers-reduced-motion: reduce), (max-height: 700px) and (min-width: 641px) {
 		.scroll-shell {
 			height: auto;
 		}
@@ -166,7 +193,13 @@
 		}
 
 		.presentation-panel {
+			height: auto;
 			min-height: calc(100svh - 4rem);
+		}
+
+		.panel-card {
+			max-height: none;
+			overflow: visible;
 		}
 	}
 

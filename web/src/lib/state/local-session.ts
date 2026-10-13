@@ -16,6 +16,7 @@ const initialSession: LocalSession = { registration: null, progress: 0 };
 
 export function createLocalSession() {
 	const session = writable<LocalSession>(initialSession);
+	let hydrated = false;
 
 	function persist(next: LocalSession) {
 		session.set(next);
@@ -28,7 +29,10 @@ export function createLocalSession() {
 
 	return {
 		session,
+		getSnapshot: () => get(session),
 		hydrate() {
+			if (hydrated) return;
+			hydrated = true;
 			try {
 				const saved = window.localStorage.getItem(storageKey);
 				if (!saved) return;
