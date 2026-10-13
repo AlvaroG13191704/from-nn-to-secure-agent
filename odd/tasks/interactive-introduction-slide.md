@@ -36,7 +36,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - [x] T1 — Establish the visual system, shared navigation, local registration/progress state, simulated presence adapter, and horizontal scrollytelling shell.
 - [x] T2 — Implement presenter and workshop-overview sections using the supplied sources with privacy-safe copy.
 - [x] T3 — Implement the AI-to-agents conceptual sequence with one meaningful responsive SVG animation per topic.
-- [ ] T4 — Implement `/register`, persistence, return navigation, and registered-state feedback.
+- [x] T4 — Implement `/register`, persistence, return navigation, and registered-state feedback.
 - [ ] T5 — Verify Svelte components with the Svelte autofixer, run focused checks and build, validate reduced motion/responsiveness, and record evidence.
 
 ## Acceptance criteria
@@ -52,12 +52,14 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 ## Progress
 
-- Status: T1–T3 complete; T4–T5 remain pending.
+- Status: T1–T4 complete; T5 remains pending.
 - Decision: real realtime presence and AWS infrastructure are deferred until the final slides are ready.
 - T1 correction: restore the persisted section before initial scroll tracking; use stacked panels on reduced-motion and short landscape layouts, with overflow scrolling available for enlarged content.
 - T2: replaced the opening placeholders with a concise introduction, first-name-only presenter profile, and two-session overview. The workshop timeline uses a restrained progressive reveal that becomes static with reduced motion; the seven topic animations remain deferred to T3.
 - T2 assessment: parent recorded `medium / under_budget` for the accumulated range.
 - T3: added seven concept cards in the existing workshop panel. Each includes a responsive inline SVG that reveals its explanatory stages when the topic enters view; full diagrams and text remain available without motion. No visualization dependency was added.
+- T2–T3 assessment: parent recorded `medium / review declined by user`; work continued under ordinary policy.
+- T4: added a client-only registration page that validates name and carnet, persists through the existing browser-local session controller, and lets registered users update their name without displaying the saved carnet. The navigation link reflects the registered state, and the return link preserves the presentation route/progress. The presence simulation remains replaceable behind its provider interface and is explicitly described as simulated in the UI.
 
 ## Verification evidence
 
@@ -72,7 +74,8 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - T3 verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed. Adapter-auto again reported no production adapter configured, and Node reported the existing `NO_COLOR`/`FORCE_COLOR` environment warning.
 - T3 Svelte autofixer (Svelte 5): `ScrollytellingShell.svelte`, `TopicLearningSequence.svelte`, and `ConceptDiagram.svelte` reported no issues; the first two had optional `bind:this` suggestions. The T3 visuals use no D3/GSAP dependencies because hand-authored SVG with CSS sequencing is sufficient.
 - T3 `git diff --check` passed for the allowed presentation, visualization, and task-document surfaces. No test runner is configured, and no framework was added for static presentation content.
+- T4 verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with only the existing adapter-auto informational notice and Node `NO_COLOR`/`FORCE_COLOR` warning. Svelte 5 autofixer reported no issues or suggestions for `register/+page.svelte` and `NavigationBar.svelte`. No test runner is configured in `web/package.json`, so no dependency was added for the form.
 
 ## Next step
 
-Proceed with T4; T4–T5 remain pending.
+Proceed with T5; T5 remains pending.

@@ -28,7 +28,7 @@
 			</p>
 			<a class="rounded-full bg-primary px-4 py-2 font-semibold text-white hover:bg-blue-800" href="/register">
 				{#if currentSession.registration}
-					Inscripción completa
+					Actualizar inscripción
 				{:else}
 					Inscribirme
 				{/if}
