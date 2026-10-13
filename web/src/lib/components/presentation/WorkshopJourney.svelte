@@ -91,6 +91,7 @@
 
 	.stop-card {
 		margin-top: 1rem;
+		min-width: 0;
 		min-height: 10rem;
 		padding: 1.25rem;
 		border: 1px solid var(--color-line);
@@ -114,6 +115,10 @@
 		to { transform: scaleX(1); }
 	}
 
+	@keyframes connect-journey-vertical {
+		to { transform: scaleY(1); }
+	}
+
 	@keyframes reveal-stop {
 		from { opacity: 0.25; transform: translateY(0.5rem); }
 		to { opacity: 1; transform: translateY(0); }
@@ -126,6 +131,44 @@
 
 		.journey-track::before { display: none; }
 		.stop-card { min-height: 8rem; }
+	}
+
+	@media (max-width: 640px) {
+		.journey-track {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.75rem;
+		}
+
+		.journey-track::before {
+			display: block;
+			top: 1.25rem;
+			right: auto;
+			bottom: 1.25rem;
+			left: 1.25rem;
+			width: 2px;
+			height: auto;
+			transform: scaleY(0);
+			transform-origin: top;
+		}
+
+		.journey-stop {
+			display: grid;
+			grid-template-columns: 2.5rem minmax(0, 1fr);
+			align-items: start;
+			gap: 0.75rem;
+		}
+
+		.stop-card {
+			grid-column: 2;
+			margin-top: 0;
+			min-height: 0;
+			padding: 1rem;
+			overflow-wrap: anywhere;
+		}
+
+		.animate-sequence::before {
+			animation-name: connect-journey-vertical;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

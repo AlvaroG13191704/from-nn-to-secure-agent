@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LocalSessionController } from '../../state/local-session.js';
 	import WorkshopJourney from './WorkshopJourney.svelte';
@@ -59,22 +60,33 @@
 		window.scrollTo({ top, behavior: reducedMotion ? 'instant' : 'smooth' });
 	}
 
+	function restorePosition(index: number) {
+		if (verticalAccess) {
+			track && (track.style.transform = '');
+			document.getElementById(panelIds[index])?.scrollIntoView({ behavior: 'instant' });
+		} else if (shell) {
+			const ratio = index / (panels.length - 1);
+			const maxScroll = Math.max(0, shell.offsetHeight - window.innerHeight);
+			window.scrollTo({ top: shell.offsetTop + ratio * maxScroll, behavior: 'instant' });
+		}
+		requestAnimationFrame(updatePosition);
+	}
+
+	afterNavigate(({ to }) => {
+		if (to?.url.pathname !== '/') return;
+
+		localSession.hydrate();
+		const savedProgress = localSession.getSnapshot().progress;
+		activeIndex = savedProgress;
+		lastProgress = savedProgress;
+		restorePosition(savedProgress);
+	});
+
 	onMount(() => {
 		localSession.hydrate();
 		const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 		const compactViewport = window.matchMedia('(max-height: 700px) and (min-width: 641px)');
 		let initialized = false;
-		const restorePosition = (index: number) => {
-			if (verticalAccess) {
-				track && (track.style.transform = '');
-				document.getElementById(panelIds[index])?.scrollIntoView({ behavior: 'instant' });
-			} else if (shell) {
-				const ratio = index / (panels.length - 1);
-				const maxScroll = Math.max(0, shell.offsetHeight - window.innerHeight);
-				window.scrollTo({ top: shell.offsetTop + ratio * maxScroll, behavior: 'instant' });
-			}
-			requestAnimationFrame(updatePosition);
-		};
 		const syncLayout = () => {
 			const wasVertical = verticalAccess;
 			reducedMotion = motionPreference.matches;
@@ -83,10 +95,6 @@
 		};
 		const handleScroll = () => requestAnimationFrame(updatePosition);
 		syncLayout();
-		const savedProgress = localSession.getSnapshot().progress;
-		activeIndex = savedProgress;
-		lastProgress = savedProgress;
-		restorePosition(savedProgress);
 		initialized = true;
 		motionPreference.addEventListener('change', syncLayout);
 		compactViewport.addEventListener('change', syncLayout);
