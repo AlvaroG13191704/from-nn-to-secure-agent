@@ -52,7 +52,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 ## Progress
 
-- Status: T1–T5 complete; the first interactive workshop slide is ready for local review.
+- Status: T1–T8 complete; introduction refinements are ready for presenter review.
 - Decision: real realtime presence and AWS infrastructure are deferred until the final slides are ready.
 - T1 correction: restore the persisted section before initial scroll tracking; use stacked panels on reduced-motion and short landscape layouts, with overflow scrolling available for enlarged content.
 - T2: replaced the opening placeholders with a concise introduction, first-name-only presenter profile, and two-session overview. The workshop timeline uses a restrained progressive reveal that becomes static with reduced motion; the seven topic animations remain deferred to T3.
@@ -84,7 +84,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 - [x] T6 — Correct title and first-person voice, reclaim horizontal width, add optional portrait and document its drop-in path.
 - [x] T7 — Repair journey and diagram geometry; expand AI purpose and ML learning regimes, model families, training and inference.
-- [ ] T8 — Run Svelte checks/build/autofixer and inspect desktop/mobile screenshots, including animation states and registration-return persistence.
+- [x] T8 — Run Svelte checks/build/autofixer and inspect desktop/mobile screenshots, including animation states and registration-return persistence.
 - Route: delegated direct for all three tasks; coordinated multi-file visual/content changes trigger the writer and preparation rules.
 - Forecast: approximately 450–650 authored changed lines; existing feature-branch-chain applies.
 - RDD: globally disabled, ordinary checks only.
@@ -96,6 +96,15 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 - T6 commit: `79a0bf6` (126 authored additions/deletions).
 - T7 proof: per-stop connectors now meet each marker in desktop and stacked layouts. IA label clears its curve; neuron weights clear input lines; deep output circles no longer overlap; LLM text and selected-token arrow stay inside destination boxes; agent feedback loop avoids its decision node. ML learning regimes and model families are separate, with four staged diagrams and training/evaluation/inference stages. Content cross-checked with Google ML introduction and scikit-learn supervised/unsupervised guides. Check/build/autofixer/diff checks passed; desktop screenshots inspected for every concept.
+
+- T7 commit: `57bfd7a` (304 authored additions/deletions; refinement running total 430).
+- T8 verification: final `npm run check` reported 0 errors and 0 warnings; final `npm run build` passed. Only existing adapter-auto deployment and Node color-environment notices remain. Official Svelte 5 autofixer ran on all nine changed components; no issues, optional `bind:this` suggestions only. Scoped `git diff --check` passed. Initial check failures (removed SvelteKit `base` export, dynamic CSS selector recognition) were corrected and rerun successfully.
+- Browser QA used the in-app browser at 1366×768 and 375×812. Captures inspected the hero, presenter, continuous desktop/stacked timelines, all seven concept diagrams, four ML regime illustrations, model-family content and training/evaluation/inference. Early and final animation states were observed; capture timing was real-time rather than frame-exact. Screenshot review prompted additional fixes to neuron weight labels, LLM probability-bar borders/context text and mobile portrait caption clearance.
+- Mobile document width equals viewport width (375px). Wide concept diagrams intentionally retain focusable horizontal scrolling instead of shrinking labels further; the new hint explains the gesture. Confirmed left/right access on IA and LLM diagrams. The four ML regime diagrams fit their cards.
+- Registration regression: existing QA registration remained visible, navigation to `/register` and back followed by reload retained section 3 (`aria-current="step"`). No stored name or carnet was changed. Reduced-motion CSS/static fallback reviewed structurally; media emulation is not exposed by this browser API, so runtime reduced-motion emulation was not performed.
+- Screenshot evidence (temporary local artifacts): `/private/tmp/workshop-refinement/desktop-presenter.jpg`, `desktop-timeline.jpg`, `desktop-ia.jpg`, `desktop-ml-final.jpg`, `desktop-regimes-final.jpg`, `desktop-self-supervision-final.jpg`, `desktop-neural-final.jpg`, `desktop-deep-final.jpg`, `desktop-nlp-final.jpg`, `desktop-llm-final.jpg`, `desktop-agent-final.jpg`, `mobile-hero.jpg`, `mobile-presenter.jpg`, `mobile-timeline.jpg`, `mobile-ia-left.jpg`, `mobile-ia-right.jpg`, `mobile-llm.jpg`. The first neuron snapshot precedes the final weight-label offset correction; the later mobile neuron capture verifies that correction. The desktop ML overview snapshot precedes the final boundary simplification; no logic changes followed final checks.
+- Portrait file is intentionally absent; the attempted image request returns 404 and activates the designed fallback without displaying a broken image. Adding `web/static/images/alvaro.jpg` and reloading replaces it. No portrait was fabricated.
+- RDD remained disabled/unmanaged. No dependencies, package-manager files, user ignore files or backend services were modified. Local preview remains at `http://127.0.0.1:5173/` for parent spot checks.
 
 ## Next step
 
