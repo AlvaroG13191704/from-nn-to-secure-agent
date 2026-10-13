@@ -2,6 +2,7 @@
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LocalSessionController } from '../../state/local-session.js';
+	import PresenterPortrait from './PresenterPortrait.svelte';
 	import WorkshopJourney from './WorkshopJourney.svelte';
 	import TopicLearningSequence from './TopicLearningSequence.svelte';
 
@@ -15,9 +16,9 @@
 	let activeIndex = $state(0);
 	const panelIds = ['bienvenida', 'recorrido', 'aprendizaje'];
 	const panels = [
-		{ id: panelIds[0], eyebrow: 'Bienvenida', title: 'De la curiosidad a la inteligencia artificial.', copy: 'Un recorrido práctico para entender cómo aprenden los modelos y cómo se convierten en herramientas útiles.' },
-		{ id: panelIds[1], eyebrow: 'Quién facilita', title: 'Experiencia técnica, enfoque para aprender.', copy: 'Álvaro es Senior AI Engineer en Deloitte Guatemala. Su trabajo abarca aprendizaje profundo, modelos de lenguaje, agentes, RAG y sistemas backend.' },
-		{ id: panelIds[2], eyebrow: 'El taller', title: 'Cuatro horas para conectar fundamentos y aplicaciones.', copy: 'Dos sesiones de dos horas combinan explicaciones, demostraciones visuales y desafíos breves.' }
+		{ id: panelIds[0], eyebrow: 'Bienvenida', title: 'De Neuronas a Agentes Seguros', copy: 'Vamos a descubrir cómo aprenden los modelos, construir agentes y comprender cómo protegerlos. Conectaremos las matemáticas que ya conocemos con herramientas que podemos crear.' },
+		{ id: panelIds[1], eyebrow: 'Quién soy', title: 'Soy Álvaro. Construyamos conocimiento juntos.', copy: 'Soy Senior AI Engineer en Deloitte Guatemala. Trabajo con aprendizaje profundo, modelos de lenguaje, agentes, RAG y sistemas backend.' },
+		{ id: panelIds[2], eyebrow: 'El taller', title: 'Conectemos fundamentos y aplicaciones.', copy: 'Durante dos sesiones de dos horas combinaremos explicaciones, demostraciones visuales y desafíos breves.' }
 	];
 
 	function recordProgress(index: number) {
@@ -114,11 +115,13 @@
 		<div class="presentation-stage">
 			<div class="presentation-track" bind:this={track}>
 				{#each panels as panel, index (panel.id)}
-					<section class="presentation-panel" id={panel.id} aria-labelledby={`${panel.id}-title`} aria-roledescription="diapositiva" inert={!reducedMotion && activeIndex !== index}>
+					<section class="presentation-panel" id={panel.id} aria-labelledby={`${panel.id}-title`} aria-roledescription="diapositiva" inert={!verticalAccess && activeIndex !== index}>
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div class="panel-card" role="region" tabindex="0" aria-labelledby={`${panel.id}-title`}>
+							<div class:presenter-layout={index === 1}>
+							<div>
 							<p class="mb-5 font-semibold uppercase tracking-[0.16em] text-accent">{panel.eyebrow} <span class="text-muted">· {index + 1} de {panels.length}</span></p>
-							<h1 id={`${panel.id}-title`} class="max-w-4xl text-display font-bold tracking-tight text-ink">{panel.title}</h1>
+							<h1 class:section-title={index > 0} id={`${panel.id}-title`} class="max-w-4xl text-display font-bold tracking-tight text-ink">{panel.title}</h1>
 							<p class="mt-7 max-w-2xl text-reading text-muted">{panel.copy}</p>
 							{#if index === 0}
 								<div class="mt-8 flex flex-wrap gap-3" role="group" aria-label="Características del taller">
@@ -129,23 +132,26 @@
 								<div class="mt-8 grid gap-4 sm:grid-cols-2" role="group" aria-label="Experiencia del facilitador">
 									<div class="rounded-2xl bg-canvas p-5">
 										<h2 class="font-semibold text-ink">Formación</h2>
-										<p class="mt-2 text-muted">Ingeniería en Ciencias y Sistemas, USAC; certificado profesional en PyTorch de DeepLearning.AI.</p>
+										<p class="mt-2 text-muted">Me formé en Ingeniería en Ciencias y Sistemas en la USAC y obtuve el certificado profesional en PyTorch de DeepLearning.AI.</p>
 									</div>
 									<div class="rounded-2xl bg-canvas p-5">
 										<h2 class="font-semibold text-ink">Comunidad y enseñanza</h2>
-										<p class="mt-2 text-muted">Experiencia como auxiliar docente, instructor y creador de contenido, ponente y miembro de Cloud Native Guatemala.</p>
+										<p class="mt-2 text-muted">He sido auxiliar docente, instructor, creador de contenido y ponente. También formo parte de Cloud Native Guatemala.</p>
 									</div>
 								</div>
 							{:else}
 								<WorkshopJourney active={activeIndex === index} reducedMotion={reducedMotion} />
 								<TopicLearningSequence active={activeIndex === index} {reducedMotion} />
 							{/if}
+							</div>
+							{#if index === 1}<PresenterPortrait />{/if}
+							</div>
 							<div class="mt-10 flex flex-wrap items-center gap-3">
 								{#if index < panels.length - 1}
-									<button class="rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-blue-800" onclick={() => moveTo(index + 1)}>Siguiente sección</button>
+									<button class="rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-blue-800" onclick={() => moveTo(index + 1)}>Continuemos</button>
 								{/if}
 								{#if index > 0}
-									<button class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" onclick={() => moveTo(index - 1)}>Sección anterior</button>
+									<button class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" onclick={() => moveTo(index - 1)}>Volvamos</button>
 								{/if}
 							</div>
 						</div>
@@ -191,14 +197,15 @@
 		height: 100%;
 		min-height: 100%;
 		place-items: center;
-		padding: clamp(1.25rem, 5vw, 5rem);
+		padding: clamp(0.75rem, 1.5vw, 2rem);
+		padding-bottom: 4.75rem;
 	}
 
 	.panel-card {
-		width: min(100%, 76rem);
+		width: min(100%, 100rem);
 		max-height: 100%;
 		overflow-y: auto;
-		padding: clamp(1.5rem, 5vw, 5rem);
+		padding: clamp(1.25rem, 2.75vw, 3rem);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-panel);
 		background: var(--color-surface);
@@ -233,6 +240,10 @@
 			overflow: visible;
 		}
 	}
+
+	.section-title { font-size: clamp(2rem, 4.3vw, 3.75rem); max-width: 68rem; }
+	.presenter-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.4fr); gap: 2rem; align-items: center; }
+	@media (max-width: 900px) { .presenter-layout { grid-template-columns: minmax(0, 1fr); } }
 
 	@media (max-width: 640px) {
 		.panel-card {

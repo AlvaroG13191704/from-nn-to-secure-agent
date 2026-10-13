@@ -80,6 +80,20 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - T4 verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with only the existing adapter-auto informational notice and Node `NO_COLOR`/`FORCE_COLOR` warning. Svelte 5 autofixer reported no issues or suggestions for `register/+page.svelte` and `NavigationBar.svelte`. No test runner is configured in `web/package.json`, so no dependency was added for the form.
 - T5 correction verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed with the existing adapter-auto notice and Node color-environment warning. Svelte 5 autofixer found no issues in `ScrollytellingShell.svelte` or `WorkshopJourney.svelte`; it offered only two optional `bind:this` suggestions for the shell. A final browser pass at 1366×768 reached section 3, opened `/register`, saved and reloaded test registration, returned to `/`, and retained section 3 after another reload. At 375×812 the `Fundamentos` heading and its 285px card remained within the 375px document (`scrollWidth === clientWidth`); at 844×390 the agent heading was reachable and the navbar stayed fixed. Reduced-motion behavior remains supported by code and earlier structural checks, but browser-level media emulation was unavailable.
 
+## Refinement plan (2026-10-13)
+
+- [x] T6 — Correct title and first-person voice, reclaim horizontal width, add optional portrait and document its drop-in path.
+- [ ] T7 — Repair journey and diagram geometry; expand AI purpose and ML learning regimes, model families, training and inference.
+- [ ] T8 — Run Svelte checks/build/autofixer and inspect desktop/mobile screenshots, including animation states and registration-return persistence.
+- Route: delegated direct for all three tasks; coordinated multi-file visual/content changes trigger the writer and preparation rules.
+- Forecast: approximately 450–650 authored changed lines; existing feature-branch-chain applies.
+- RDD: globally disabled, ordinary checks only.
+- Test-first exception: no configured deterministic visual test runner; derive geometry failures and capture the current render before fixing, then inspect the corrected render.
+- Preserve pre-existing package-manager, ignore-file and skill-lock edits. No dependency installation or backend.
+- Evidence before changes: journey connector begins at 12.5% although markers are left-aligned; 641–900px removes connector entirely. IA curve peaks at y=32 while title baseline is y=35. Deep output circles overlap (40px center distance with 24px radii). LLM selection arrow ends above its destination. SVG draw-edge animation has no nonzero starting dashoffset.
+
+- T6 proof: title, first-person presenter and learning voice, reduced outer/inner gutters and responsive optional portrait verified in desktop/mobile screenshots. `npm run check` passes (0 errors/warnings), `npm run build` passes, nine Svelte autofixers report no issues (only optional bind:this suggestions). Portrait drop-in documented in web/README.md; SvelteKit 3 uses `asset()` rather than removed `base`.
+
 ## Next step
 
 Review the first slide visually with the presenter, then iterate on content or begin the next workshop route. Realtime AWS presence remains intentionally deferred.

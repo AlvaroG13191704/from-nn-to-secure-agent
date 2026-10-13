@@ -54,3 +54,12 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Presenter portrait
+
+Place the presenter photo at `web/static/images/alvaro.jpg` (relative to the repository root).
+SvelteKit serves static files without an import: `PresenterPortrait.svelte` references
+`/images/alvaro.jpg`, prefixed with the configured base path. A 4:5 portrait of at least
+800×1000 pixels works well; `object-fit: cover` crops it to the frame. The designed
+placeholder remains visible when the file is absent or fails to load. Reload the page
+after adding or replacing the file. Do not put private CV documents in `static/`.

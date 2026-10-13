@@ -6,8 +6,8 @@
 </script>
 
 <svelte:head>
-	<title>Introducción al taller de inteligencia artificial</title>
-	<meta name="description" content="Recorrido introductorio del taller de inteligencia artificial." />
+	<title>De Neuronas a Agentes Seguros</title>
+	<meta name="description" content="Conectamos matemáticas, inteligencia artificial y seguridad en un recorrido práctico." />
 </svelte:head>
 
 <ScrollytellingShell {localSession} />

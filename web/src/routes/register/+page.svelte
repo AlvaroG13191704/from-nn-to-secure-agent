@@ -61,7 +61,7 @@
 </script>
 
 <svelte:head>
-	<title>Inscripción | Taller IA</title>
+	<title>Inscripción | De Neuronas a Agentes Seguros</title>
 	<meta name="description" content="Registra tu nombre y carnet para participar en las actividades en vivo del taller." />
 </svelte:head>
 
@@ -70,10 +70,10 @@
 		<div class="space-y-5">
 			<p class="text-sm font-bold uppercase tracking-[0.16em] text-accent">Participación en vivo</p>
 			<h1 id="registration-title" class="max-w-2xl text-4xl font-bold tracking-tight text-ink sm:text-5xl">
-				Inscripción al taller
+				Me sumo al taller
 			</h1>
 			<p class="max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
-				Registra tu nombre y carnet para participar en las actividades en vivo. La presentación está disponible sin inscripción.
+				Guardemos nuestro nombre y carnet en este navegador. Podemos recorrer la presentación sin inscribirnos; las actividades en vivo llegarán después.
 			</p>
 			<a class="inline-flex rounded-lg font-semibold text-primary underline decoration-primary/40 underline-offset-4 hover:decoration-primary" href="/">
 				Volver a la presentación
@@ -95,7 +95,7 @@
 					<p class="text-sm text-muted">Los datos se conservan solo en este perfil del navegador.</p>
 				</div>
 			{:else}
-				<h2 class="mb-6 text-2xl font-bold text-ink">{currentSession.registration ? 'Actualizar datos' : 'Completa tus datos'}</h2>
+				<h2 class="mb-6 text-2xl font-bold text-ink">{currentSession.registration ? 'Actualizar mis datos' : 'Mis datos'}</h2>
 				<form class="space-y-5" onsubmit={handleSubmit} novalidate>
 					<div class="space-y-2">
 						<label class="block font-semibold text-ink" for="student-name">Nombre</label>
