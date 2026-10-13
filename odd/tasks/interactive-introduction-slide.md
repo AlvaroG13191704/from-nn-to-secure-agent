@@ -83,7 +83,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 ## Refinement plan (2026-10-13)
 
 - [x] T6 — Correct title and first-person voice, reclaim horizontal width, add optional portrait and document its drop-in path.
-- [ ] T7 — Repair journey and diagram geometry; expand AI purpose and ML learning regimes, model families, training and inference.
+- [x] T7 — Repair journey and diagram geometry; expand AI purpose and ML learning regimes, model families, training and inference.
 - [ ] T8 — Run Svelte checks/build/autofixer and inspect desktop/mobile screenshots, including animation states and registration-return persistence.
 - Route: delegated direct for all three tasks; coordinated multi-file visual/content changes trigger the writer and preparation rules.
 - Forecast: approximately 450–650 authored changed lines; existing feature-branch-chain applies.
@@ -93,6 +93,9 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - Evidence before changes: journey connector begins at 12.5% although markers are left-aligned; 641–900px removes connector entirely. IA curve peaks at y=32 while title baseline is y=35. Deep output circles overlap (40px center distance with 24px radii). LLM selection arrow ends above its destination. SVG draw-edge animation has no nonzero starting dashoffset.
 
 - T6 proof: title, first-person presenter and learning voice, reduced outer/inner gutters and responsive optional portrait verified in desktop/mobile screenshots. `npm run check` passes (0 errors/warnings), `npm run build` passes, nine Svelte autofixers report no issues (only optional bind:this suggestions). Portrait drop-in documented in web/README.md; SvelteKit 3 uses `asset()` rather than removed `base`.
+
+- T6 commit: `79a0bf6` (126 authored additions/deletions).
+- T7 proof: per-stop connectors now meet each marker in desktop and stacked layouts. IA label clears its curve; neuron weights clear input lines; deep output circles no longer overlap; LLM text and selected-token arrow stay inside destination boxes; agent feedback loop avoids its decision node. ML learning regimes and model families are separate, with four staged diagrams and training/evaluation/inference stages. Content cross-checked with Google ML introduction and scikit-learn supervised/unsupervised guides. Check/build/autofixer/diff checks passed; desktop screenshots inspected for every concept.
 
 ## Next step
 

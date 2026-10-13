@@ -6,7 +6,7 @@
 <svg
 	class={`concept-diagram ${topic}-diagram`}
 	class:play={active && !reducedMotion}
-	viewBox="0 0 640 220"
+	viewBox="0 0 640 240"
 	preserveAspectRatio="xMidYMid meet"
 	aria-hidden="true"
 >
@@ -29,8 +29,8 @@
 		</g>
 		<g class="label"><text x="89" y="115" text-anchor="middle">Reglas</text><text x="280" y="115" text-anchor="middle">¿?</text><text x="465" y="115" text-anchor="middle">Decisión</text></g>
 		<g class="label umbrella">
-			<path d="M184 57 Q320 7 456 57" />
-			<text x="320" y="35" text-anchor="middle">IA: el campo más amplio</text>
+			<path d="M184 66 Q320 24 456 66" />
+			<text x="320" y="20" text-anchor="middle">IA: el campo más amplio</text>
 		</g>
 	{:else if topic === 'ml'}
 		<g class="label fixed-rule">
@@ -43,7 +43,7 @@
 			<circle cx="270" cy="72" r="9" /><circle cx="315" cy="52" r="9" /><circle cx="358" cy="87" r="9" />
 			<circle cx="286" cy="150" r="9" /><circle cx="337" cy="166" r="9" /><circle cx="382" cy="137" r="9" />
 		</g>
-		<path class="edge boundary" pathLength="1" d="M242 158 L408 48" />
+		<path class="edge boundary" pathLength="1" d="M242 110 H408" />
 		<g class="label class-label"><text x="482" y="78" text-anchor="middle">Clase A</text><text x="482" y="151" text-anchor="middle">Clase B</text></g>
 	{:else if topic === 'neural'}
 		<g class="edge-group">
@@ -55,22 +55,22 @@
 		</g>
 		<g class="label">
 			<text x="72" y="63" text-anchor="middle">x₁</text><text x="72" y="165" text-anchor="middle">x₂</text>
-			<text x="165" y="92" text-anchor="middle">w₁</text><text x="165" y="137" text-anchor="middle">w₂</text>
+			<text x="165" y="77" text-anchor="middle">w₁</text><text x="165" y="153" text-anchor="middle">w₂</text>
 			<text x="254" y="113" text-anchor="middle">Σ</text><text x="404" y="113" text-anchor="middle">σ</text>
 			<text x="568" y="113" text-anchor="middle">y</text>
 		</g>
 		<g class="label update">
-			<path d="M255 184 Q340 216 402 176" />
-			<text x="333" y="211" text-anchor="middle">error → ajuste de w₁</text>
+			<path d="M255 170 Q330 195 402 170" />
+			<text x="333" y="220" text-anchor="middle">error → ajuste de w₁</text>
 		</g>
 	{:else if topic === 'deep'}
 		<g class="edge-group">
-			<path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M114 64 L232 47 M114 64 L232 110 M114 156 L232 110 M114 156 L232 173 M264 47 L382 64 M264 110 L382 64 M264 110 L382 156 M264 173 L382 156 M414 64 L532 90 M414 156 L532 130" />
+			<path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M114 64 L232 47 M114 64 L232 110 M114 156 L232 110 M114 156 L232 173 M264 47 L382 64 M264 110 L382 64 M264 110 L382 156 M264 173 L382 156 M414 64 L534 75 M414 156 L534 145" />
 		</g>
 		<g class="node layer-one"><circle cx="88" cy="64" r="24" /><circle cx="88" cy="156" r="24" /></g>
 		<g class="node layer-two"><circle cx="248" cy="47" r="21" /><circle cx="248" cy="110" r="21" /><circle cx="248" cy="173" r="21" /></g>
 		<g class="node layer-three"><circle cx="398" cy="64" r="21" /><circle cx="398" cy="156" r="21" /></g>
-		<g class="node layer-four"><circle cx="558" cy="90" r="24" /><circle cx="558" cy="130" r="24" /></g>
+		<g class="node layer-four"><circle cx="558" cy="75" r="24" /><circle cx="558" cy="145" r="24" /></g>
 		<g class="label"><text x="88" y="207" text-anchor="middle">Entrada</text><text x="248" y="207" text-anchor="middle">Rasgos</text><text x="398" y="207" text-anchor="middle">Patrones</text><text x="558" y="207" text-anchor="middle">Concepto</text></g>
 	{:else if topic === 'nlp'}
 		<g class="label sentence"><text x="320" y="33" text-anchor="middle">«Los modelos leen texto»</text></g>
@@ -79,24 +79,24 @@
 			<rect x="324" y="66" width="130" height="48" rx="12" /><rect x="474" y="66" width="142" height="48" rx="12" />
 		</g>
 		<g class="label token-label"><text x="89" y="96" text-anchor="middle">Los</text><text x="239" y="96" text-anchor="middle">modelos</text><text x="389" y="96" text-anchor="middle">leen</text><text x="545" y="96" text-anchor="middle">texto</text></g>
-		<g class="edge token-edge"><path marker-end={`url(#arrow-${topic})`} d="M89 115 V143 M239 115 V143 M389 115 V143 M545 115 V143" /></g>
+		<g class="token-edge"><path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M89 115 V143 M239 115 V143 M389 115 V143 M545 115 V143" /></g>
 		<g class="node number"><rect x="24" y="146" width="130" height="42" rx="10" /><rect x="174" y="146" width="130" height="42" rx="10" /><rect x="324" y="146" width="130" height="42" rx="10" /><rect x="474" y="146" width="142" height="42" rx="10" /></g>
 		<g class="label number-label"><text x="89" y="173" text-anchor="middle">37</text><text x="239" y="173" text-anchor="middle">104</text><text x="389" y="173" text-anchor="middle">15</text><text x="545" y="173" text-anchor="middle">82</text><text x="320" y="215" text-anchor="middle">IDs ilustrativos</text></g>
 	{:else if topic === 'llm'}
 		<g class="node context"><rect x="20" y="78" width="174" height="70" rx="14" /></g>
-		<g class="label"><text x="107" y="105" text-anchor="middle">Contexto</text><text x="107" y="129" text-anchor="middle">«La IA aprende de…»</text></g>
+		<g class="label"><text x="107" y="105" text-anchor="middle">Contexto</text><text class="context-example" x="107" y="129" text-anchor="middle">«La IA aprende de…»</text></g>
 		<path class="edge probability-edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M194 113 H236" />
 		<g class="node probabilities">
 			<rect x="246" y="47" width="204" height="34" rx="9" /><rect x="246" y="94" width="204" height="34" rx="9" /><rect x="246" y="141" width="204" height="34" rx="9" />
 			<rect class="probability-bar bar-one" x="246" y="47" width="146" height="34" rx="9" /><rect class="probability-bar bar-two" x="246" y="94" width="37" height="34" rx="9" /><rect class="probability-bar bar-three" x="246" y="141" width="20" height="34" rx="9" />
 		</g>
 		<g class="label candidate"><text x="262" y="70">datos · 72%</text><text x="262" y="117">reglas · 18%</text><text x="262" y="164">frutas · 10%</text></g>
-		<path class="edge selection-edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M450 64 H492" />
+		<path class="edge selection-edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M450 64 H475 V113 H498" />
 		<g class="node selected"><rect x="498" y="78" width="122" height="70" rx="14" /></g>
 		<g class="label selected-label"><text x="559" y="120" text-anchor="middle">datos</text><text x="320" y="203" text-anchor="middle">Probabilidades ilustrativas</text></g>
 	{:else}
 		<g class="edge-group">
-			<path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M142 108 H202 M322 108 H382 M502 108 H540 Q601 108 601 160 Q601 199 544 199 H100 Q38 199 38 161 V139" />
+			<path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M142 108 H202 M322 108 H382 M502 108 H522 M572 144 V190 H82 V144" />
 		</g>
 		<g class="node agent-step"><rect x="22" y="72" width="120" height="72" rx="14" /></g>
 		<g class="node agent-step agent-tool"><rect x="202" y="72" width="120" height="72" rx="14" /></g>
@@ -114,8 +114,8 @@
 	.concept-diagram {
 		display: block;
 		width: 100%;
-		min-width: 32rem;
-		max-height: 13rem;
+		min-width: 28rem;
+		max-height: 16rem;
 		margin: 1.25rem auto 0;
 		color: var(--color-ink);
 		font: 600 17px/1.2 var(--font-sans);
@@ -156,9 +156,10 @@
 	.concept-diagram .token rect { fill: var(--color-primary-soft); }
 	.concept-diagram .number rect { fill: var(--color-accent-soft); stroke: var(--color-accent); }
 	.concept-diagram .probabilities > rect { fill: var(--color-canvas); stroke: var(--color-line); }
-	.concept-diagram .probabilities .probability-bar { fill: var(--color-primary-soft); stroke: var(--color-primary); }
+	.concept-diagram .probabilities .probability-bar { fill: var(--color-primary-soft); stroke: none; }
+	.concept-diagram .context-example { font-size: 14px; }
 	.concept-diagram .probabilities .bar-two,
-	.concept-diagram .probabilities .bar-three { fill: var(--color-canvas); }
+	.concept-diagram .probabilities .bar-three { fill: var(--color-primary-soft); }
 	.concept-diagram .selected rect { fill: var(--color-primary); }
 	.concept-diagram .selected-label text:first-child { fill: white; font-weight: 700; }
 	.concept-diagram .selected-label text:last-child { fill: var(--color-muted); font-weight: 500; }
@@ -200,7 +201,7 @@
 		from { opacity: 0.2; transform: scale(0.86); }
 		to { opacity: 1; transform: scale(1); }
 	}
-	@keyframes draw-edge { to { stroke-dashoffset: 0; } }
+	@keyframes draw-edge { from { stroke-dashoffset: 1; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
 	@keyframes reveal-label { from { opacity: 0; } to { opacity: 1; } }
 	@keyframes replace-rule { 0%, 65% { opacity: 1; } 100% { opacity: 0.25; } }
 
