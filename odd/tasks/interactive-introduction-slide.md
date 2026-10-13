@@ -34,7 +34,7 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 ## Checklist
 
 - [x] T1 — Establish the visual system, shared navigation, local registration/progress state, simulated presence adapter, and horizontal scrollytelling shell.
-- [ ] T2 — Implement presenter and workshop-overview sections using the supplied sources with privacy-safe copy.
+- [x] T2 — Implement presenter and workshop-overview sections using the supplied sources with privacy-safe copy.
 - [ ] T3 — Implement the AI-to-agents conceptual sequence with one meaningful responsive SVG animation per topic.
 - [ ] T4 — Implement `/register`, persistence, return navigation, and registered-state feedback.
 - [ ] T5 — Verify Svelte components with the Svelte autofixer, run focused checks and build, validate reduced motion/responsiveness, and record evidence.
@@ -52,9 +52,10 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 
 ## Progress
 
-- Status: T1 complete; T2–T5 remain pending.
+- Status: T1–T2 complete; T3–T5 remain pending.
 - Decision: real realtime presence and AWS infrastructure are deferred until the final slides are ready.
 - T1 correction: restore the persisted section before initial scroll tracking; use stacked panels on reduced-motion and short landscape layouts, with overflow scrolling available for enlarged content.
+- T2: replaced the opening placeholders with a concise introduction, first-name-only presenter profile, and two-session overview. The workshop timeline uses a restrained progressive reveal that becomes static with reduced motion; the seven topic animations remain deferred to T3.
 
 ## Verification evidence
 
@@ -62,7 +63,11 @@ Build the first workshop route as an accessible horizontal scrollytelling presen
 - Svelte autofixer (`@sveltejs/mcp svelte-autofixer`, Svelte 5) ran on all four changed Svelte files: no issues or suggestions for layout, home route, and navigation; presentation shell had no issues and two optional `bind:this` suggestions.
 - `git diff --check` passed for T1 source surfaces.
 - Correction verification: `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed; the presentation shell autofixer reported no issues and two optional `bind:this` suggestions. No test script is configured in `web/package.json`, so no new test dependency was added.
+- T1 correction commit `6f9bcee`: parent assessment recorded `medium / under_budget`.
+- T2 verification: `web/` `npm run check` passed with 0 errors and 0 warnings; `npm run build` passed. The build emitted only environment/color warnings and the adapter-auto informational message that no production adapter is configured.
+- T2 Svelte autofixer (Svelte 5): `ScrollytellingShell.svelte` reported no issues and two optional `bind:this` suggestions; `WorkshopJourney.svelte` reported no issues or suggestions. An initial conditional-block syntax finding was corrected before final checks.
+- T2 `git diff --check` passed for the allowed source and task-document surfaces.
 
 ## Next step
 
-Proceed with T2; T2–T5 remain pending.
+Proceed with T3; T3–T5 remain pending.

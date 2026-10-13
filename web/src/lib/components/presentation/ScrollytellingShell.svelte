@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { LocalSessionController } from '../../state/local-session.js';
+	import WorkshopJourney from './WorkshopJourney.svelte';
 
 	let { localSession }: { localSession: LocalSessionController } = $props();
 	let shell = $state<HTMLElement>();
@@ -12,9 +13,9 @@
 	let activeIndex = $state(0);
 	const panelIds = ['bienvenida', 'recorrido', 'aprendizaje'];
 	const panels = [
-		{ id: panelIds[0], eyebrow: 'Introducción', title: 'Aprendamos inteligencia artificial, paso a paso.', copy: 'Una experiencia práctica para entender las ideas detrás de las herramientas que usamos cada día.' },
-		{ id: panelIds[1], eyebrow: 'El recorrido', title: 'De las ideas a los agentes.', copy: 'Exploraremos conceptos esenciales y veremos cómo se conectan en una secuencia clara.' },
-		{ id: panelIds[2], eyebrow: 'Tu progreso', title: 'Avanzá a tu ritmo.', copy: 'Desplazate hacia abajo para recorrer las secciones. El contenido seguirá siendo legible con movimiento reducido.' }
+		{ id: panelIds[0], eyebrow: 'Bienvenida', title: 'De la curiosidad a la inteligencia artificial.', copy: 'Un recorrido práctico para entender cómo aprenden los modelos y cómo se convierten en herramientas útiles.' },
+		{ id: panelIds[1], eyebrow: 'Quién facilita', title: 'Experiencia técnica, enfoque para aprender.', copy: 'Álvaro es Senior AI Engineer en Deloitte Guatemala. Su trabajo abarca aprendizaje profundo, modelos de lenguaje, agentes, RAG y sistemas backend.' },
+		{ id: panelIds[2], eyebrow: 'El taller', title: 'Cuatro horas para conectar fundamentos y aplicaciones.', copy: 'Dos sesiones de dos horas combinan explicaciones, demostraciones visuales y desafíos breves.' }
 	];
 
 	function recordProgress(index: number) {
@@ -109,6 +110,25 @@
 							<p class="mb-5 font-semibold uppercase tracking-[0.16em] text-accent">{panel.eyebrow} <span class="text-muted">· {index + 1} de {panels.length}</span></p>
 							<h1 id={`${panel.id}-title`} class="max-w-4xl text-display font-bold tracking-tight text-ink">{panel.title}</h1>
 							<p class="mt-7 max-w-2xl text-reading text-muted">{panel.copy}</p>
+							{#if index === 0}
+								<div class="mt-8 flex flex-wrap gap-3" role="group" aria-label="Características del taller">
+									<span class="rounded-full bg-primary-soft px-4 py-2 font-semibold text-primary">2 sesiones · 4 horas</span>
+									<span class="rounded-full bg-primary-soft px-4 py-2 font-semibold text-primary">Ideas, demostraciones y práctica</span>
+								</div>
+							{:else if index === 1}
+								<div class="mt-8 grid gap-4 sm:grid-cols-2" role="group" aria-label="Experiencia del facilitador">
+									<div class="rounded-2xl bg-canvas p-5">
+										<h2 class="font-semibold text-ink">Formación</h2>
+										<p class="mt-2 text-muted">Ingeniería en Ciencias y Sistemas, USAC; certificado profesional en PyTorch de DeepLearning.AI.</p>
+									</div>
+									<div class="rounded-2xl bg-canvas p-5">
+										<h2 class="font-semibold text-ink">Comunidad y enseñanza</h2>
+										<p class="mt-2 text-muted">Experiencia como auxiliar docente, instructor y creador de contenido, ponente y miembro de Cloud Native Guatemala.</p>
+									</div>
+								</div>
+							{:else}
+								<WorkshopJourney active={activeIndex === index} reducedMotion={reducedMotion} />
+							{/if}
 							<div class="mt-10 flex flex-wrap items-center gap-3">
 								{#if index < panels.length - 1}
 									<button class="rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-blue-800" onclick={() => moveTo(index + 1)}>Siguiente sección</button>
