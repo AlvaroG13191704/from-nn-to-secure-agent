@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import type { Snippet } from 'svelte';
 	import type { LocalSessionController } from '../../state/local-session.js';
 	import PresenterPortrait from './PresenterPortrait.svelte';
 	import WorkshopJourney from './WorkshopJourney.svelte';
 	import TopicLearningSequence from './TopicLearningSequence.svelte';
 
-	let { localSession }: { localSession: LocalSessionController } = $props();
+	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models'; children?: Snippet } = $props();
 	let shell = $state<HTMLElement>();
 	let track = $state<HTMLDivElement>();
 	let reducedMotion = $state(false);
@@ -85,6 +86,7 @@
 
 	onMount(() => {
 		localSession.hydrate();
+		if (mode !== 'introduction') return;
 		const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 		const compactViewport = window.matchMedia('(max-height: 700px) and (min-width: 641px)');
 		let initialized = false;
@@ -110,6 +112,20 @@
 	});
 </script>
 
+{#if mode !== 'introduction'}
+	<main class="deep-learning-shell">
+		<div class="deep-learning-topline">
+			{#if mode === 'language-models'}
+				<a class="back-link" href="/deep-learning" aria-label="Volver al recorrido de Deep Learning">← Volver a Deep Learning</a>
+				<span class="chapter-count">Recorrido 3 · Lenguaje y LLMs</span>
+			{:else}
+				<a class="back-link" href="/" aria-label="Volver a la introducción">← Volver a la introducción</a>
+				<span class="chapter-count">Recorrido 2 · Deep Learning</span>
+			{/if}
+		</div>
+		{@render children?.()}
+	</main>
+{:else}
 <main class="presentation-main">
 	<div class="scroll-shell" bind:this={shell}>
 		<div class="presentation-stage">
@@ -147,6 +163,10 @@
 							{#if index === 1}<PresenterPortrait />{/if}
 							</div>
 							<div class="mt-10 flex flex-wrap items-center gap-3">
+								{#if index === 0}
+									<a class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" href="/deep-learning">Explorar Deep Learning</a>
+									<a class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" href="/language-models">Explorar lenguaje y LLMs</a>
+								{/if}
 								{#if index < panels.length - 1}
 									<button class="rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-blue-800" onclick={() => moveTo(index + 1)}>Continuemos</button>
 								{/if}
@@ -166,8 +186,32 @@
 		{/each}
 	</nav>
 </main>
+{/if}
 
 <style>
+	.deep-learning-shell {
+		max-width: 92rem;
+		margin: 0 auto;
+		padding: 5.5rem clamp(1rem, 4vw, 3rem) 5rem;
+	}
+
+	.deep-learning-topline {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.back-link { color: var(--color-primary); font-weight: 700; text-decoration: none; }
+	.back-link:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+	.chapter-count { color: var(--color-muted); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+	@media (max-width: 760px) {
+		.deep-learning-shell { padding-top: 5rem; }
+		.deep-learning-topline { align-items: flex-start; flex-direction: column; }
+	}
+
 	.presentation-main {
 		padding-top: 4rem;
 	}

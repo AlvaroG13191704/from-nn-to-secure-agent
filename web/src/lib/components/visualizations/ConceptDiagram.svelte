@@ -33,18 +33,24 @@
 			<text x="320" y="20" text-anchor="middle">IA: el campo más amplio</text>
 		</g>
 	{:else if topic === 'ml'}
-		<g class="label fixed-rule">
-			<rect x="24" y="62" width="172" height="46" rx="12" />
-			<text x="110" y="91" text-anchor="middle">Regla fija: x &gt; 5</text>
-			<path d="M44 52 L176 118" />
+		<g class="node manual-rule">
+			<rect x="24" y="18" width="184" height="64" rx="12" />
 		</g>
-		<g class="label data-caption"><text x="350" y="34" text-anchor="middle">Los ejemplos guían el límite</text></g>
+		<g class="label manual-label">
+			<text x="116" y="44" text-anchor="middle">Regla escrita</text>
+			<text x="116" y="66" text-anchor="middle">a mano</text>
+		</g>
+		<path class="edge learning-transition" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M220 50 H304" />
+		<g class="label data-caption">
+			<text x="451" y="44" text-anchor="middle">Patrón aprendido</text>
+			<text x="451" y="66" text-anchor="middle">de los datos</text>
+		</g>
 		<g class="node data-point">
-			<circle cx="270" cy="72" r="9" /><circle cx="315" cy="52" r="9" /><circle cx="358" cy="87" r="9" />
-			<circle cx="286" cy="150" r="9" /><circle cx="337" cy="166" r="9" /><circle cx="382" cy="137" r="9" />
+			<circle cx="342" cy="119" r="9" /><circle cx="387" cy="99" r="9" /><circle cx="430" cy="134" r="9" />
+			<circle cx="358" cy="197" r="9" /><circle cx="409" cy="213" r="9" /><circle cx="454" cy="184" r="9" />
 		</g>
-		<path class="edge boundary" pathLength="1" d="M242 110 H408" />
-		<g class="label class-label"><text x="482" y="78" text-anchor="middle">Clase A</text><text x="482" y="151" text-anchor="middle">Clase B</text></g>
+		<path class="edge boundary" pathLength="1" d="M314 157 H480" />
+		<g class="label class-label"><text x="554" y="125" text-anchor="middle">Clase A</text><text x="554" y="198" text-anchor="middle">Clase B</text></g>
 	{:else if topic === 'neural'}
 		<g class="edge-group">
 			<path class="edge" pathLength="1" marker-end={`url(#arrow-${topic})`} d="M86 58 L236 108 M86 160 L236 108 M270 108 H384 M418 108 H548" />
@@ -142,8 +148,7 @@
 	.concept-diagram marker path { fill: var(--color-accent); stroke: none; }
 
 	.concept-diagram .edge { stroke-dasharray: 1; stroke-dashoffset: 0; }
-	.concept-diagram .fixed-rule rect { fill: var(--color-canvas); stroke: var(--color-line); }
-	.concept-diagram .fixed-rule path { stroke: var(--color-accent); stroke-width: 4; }
+	.concept-diagram .manual-rule rect { fill: var(--color-canvas); stroke: var(--color-line); }
 	.concept-diagram .data-point circle:nth-child(-n + 3) { fill: var(--color-primary-soft); }
 	.concept-diagram .data-point circle:nth-child(n + 4) { fill: var(--color-accent-soft); stroke: var(--color-accent); }
 	.concept-diagram .boundary { stroke: var(--color-primary); stroke-width: 4; }
@@ -170,11 +175,12 @@
 	.concept-diagram.play .token-edge path { animation: draw-edge 650ms ease-in-out 550ms both; }
 	.concept-diagram.play .label { animation: reveal-label 350ms ease-out 1.25s both; }
 	.concept-diagram.play.ia-diagram .umbrella { animation-delay: 1.8s; }
-	.concept-diagram.play.ml-diagram .fixed-rule { animation: replace-rule 1.8s ease-out both; }
-	.concept-diagram.play.ml-diagram .data-point { animation-delay: 450ms; }
-	.concept-diagram.play.ml-diagram .boundary { animation-delay: 1.05s; }
-	.concept-diagram.play.ml-diagram .data-caption,
-	.concept-diagram.play.ml-diagram .class-label { animation-delay: 1.65s; }
+	.concept-diagram.play.ml-diagram .manual-label { animation-delay: 450ms; }
+	.concept-diagram.play.ml-diagram .learning-transition { animation-delay: 850ms; }
+	.concept-diagram.play.ml-diagram .data-point { animation-delay: 1.25s; }
+	.concept-diagram.play.ml-diagram .boundary { animation-delay: 1.75s; }
+	.concept-diagram.play.ml-diagram .data-caption { animation-delay: 1.55s; }
+	.concept-diagram.play.ml-diagram .class-label { animation-delay: 2.45s; }
 	.concept-diagram.play.neural-diagram .update { animation-delay: 2s; }
 	.concept-diagram.play.deep-diagram .layer-two { animation-delay: 450ms; }
 	.concept-diagram.play.deep-diagram .layer-three { animation-delay: 950ms; }
@@ -203,7 +209,6 @@
 	}
 	@keyframes draw-edge { from { stroke-dashoffset: 1; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
 	@keyframes reveal-label { from { opacity: 0; } to { opacity: 1; } }
-	@keyframes replace-rule { 0%, 65% { opacity: 1; } 100% { opacity: 0.25; } }
 
 	@media (max-width: 640px) {
 		.concept-diagram { max-height: 10rem; font-size: 15px; }
