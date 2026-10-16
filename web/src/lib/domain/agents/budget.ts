@@ -1,4 +1,6 @@
 export type Pricing = { inputPerMillion: number; outputPerMillion: number };
+/** gemini-3.8-flash introductory price (USD per 1M tokens, through 2026-12-31); used to show equivalent costs in the browser. */
+export const REFERENCE_PRICING: Pricing = { inputPerMillion: 0.75, outputPerMillion: 3.75 };
 export type TokenUsage = { inputTokens: number; outputTokens: number; thinkingTokens: number };
 
 /** Workshop limits agreed with the presenter: a $10 hard cap shared by about 40 students. */

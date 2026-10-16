@@ -166,6 +166,7 @@
 								{#if index === 0}
 									<a class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" href="/deep-learning">Explorar Deep Learning</a>
 									<a class="rounded-full border border-line px-6 py-3 font-semibold text-ink hover:bg-canvas" href="/language-models">Explorar lenguaje y LLMs</a>
+									<a class="rounded-full border border-accent px-6 py-3 font-semibold text-accent hover:bg-accent-soft" href="/device-check">Prepara tu computadora</a>
 								{/if}
 								{#if index < panels.length - 1}
 									<button class="rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-blue-800" onclick={() => moveTo(index + 1)}>Continuemos</button>
