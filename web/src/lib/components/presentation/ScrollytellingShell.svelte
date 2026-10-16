@@ -6,8 +6,18 @@
 	import PresenterPortrait from './PresenterPortrait.svelte';
 	import WorkshopJourney from './WorkshopJourney.svelte';
 	import TopicLearningSequence from './TopicLearningSequence.svelte';
+	import ChapterRail from '../navigation/ChapterRail.svelte';
 
 	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models' | 'agents'; children?: Snippet } = $props();
+	const chapters = {
+		introduction: { number: 1, title: 'Introducción', previous: { href: '/', label: 'Introducción' } },
+		'deep-learning': { number: 2, title: 'Deep Learning', previous: { href: '/', label: 'Volver a la introducción' } },
+		'language-models': { number: 3, title: 'Lenguaje y LLMs', previous: { href: '/deep-learning', label: 'Volver a Deep Learning' } },
+		agents: { number: 4, title: 'Agentes', previous: { href: '/language-models', label: 'Volver a lenguaje y LLMs' } }
+	};
+	const chapterNumber = $derived(chapters[mode].number);
+	const chapterTitle = $derived(chapters[mode].title);
+	const previousChapter = $derived(chapters[mode].previous);
 	let shell = $state<HTMLElement>();
 	let track = $state<HTMLDivElement>();
 	let reducedMotion = $state(false);
@@ -113,21 +123,16 @@
 </script>
 
 {#if mode !== 'introduction'}
-	<main class="deep-learning-shell">
-		<div class="deep-learning-topline">
-			{#if mode === 'agents'}
-				<a class="back-link" href="/language-models" aria-label="Volver al recorrido de lenguaje y LLMs">← Volver a lenguaje y LLMs</a>
-				<span class="chapter-count">Recorrido 4 · Agentes</span>
-			{:else if mode === 'language-models'}
-				<a class="back-link" href="/deep-learning" aria-label="Volver al recorrido de Deep Learning">← Volver a Deep Learning</a>
-				<span class="chapter-count">Recorrido 3 · Lenguaje y LLMs</span>
-			{:else}
-				<a class="back-link" href="/" aria-label="Volver a la introducción">← Volver a la introducción</a>
-				<span class="chapter-count">Recorrido 2 · Deep Learning</span>
-			{/if}
-		</div>
-		{@render children?.()}
-	</main>
+	<div class="lesson-page">
+		<ChapterRail chapter={chapterNumber} title={chapterTitle} />
+		<main class="lesson-page__main">
+			<div class="deep-learning-topline">
+				<a class="back-link" href={previousChapter.href}>← {previousChapter.label}</a>
+				<span class="chapter-count">Slide {chapterNumber} de 4 · {chapterTitle}</span>
+			</div>
+			{@render children?.()}
+		</main>
+	</div>
 {:else}
 <main class="presentation-main">
 	<div class="scroll-shell" bind:this={shell}>
@@ -193,11 +198,6 @@
 {/if}
 
 <style>
-	.deep-learning-shell {
-		max-width: 92rem;
-		margin: 0 auto;
-		padding: 5.5rem clamp(1rem, 4vw, 3rem) 5rem;
-	}
 
 	.deep-learning-topline {
 		display: flex;
@@ -212,7 +212,6 @@
 	.chapter-count { color: var(--color-muted); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
 	@media (max-width: 760px) {
-		.deep-learning-shell { padding-top: 5rem; }
 		.deep-learning-topline { align-items: flex-start; flex-direction: column; }
 	}
 

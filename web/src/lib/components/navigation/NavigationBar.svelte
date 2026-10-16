@@ -97,7 +97,7 @@
 	}
 	@media (max-width: 640px) {
 		.workshop-title { max-width: 8rem; font-size: 0.8rem; }
-		nav { gap: 0.5rem; }
+		nav { gap: 0.4rem; padding-left: 0.75rem; padding-right: 0.75rem; }
 		nav > div { gap: 0.4rem; }
 		nav > div > a { padding: 0.5rem; font-size: 0.75rem; }
 		.slide-menu button { padding: 0.45rem 0.6rem; font-size: 0.75rem; }
