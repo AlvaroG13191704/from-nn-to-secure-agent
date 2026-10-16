@@ -27,17 +27,9 @@
 				<p>Conectaremos NLP, modelos de lenguaje y agentes de inteligencia artificial.</p>
 			</div>
 		</li>
-		<li class="journey-stop">
-			<span class="stop-marker" aria-hidden="true">3</span>
-			<div class="stop-card">
-				<p class="stop-meta">Cierre</p>
-				<h2>Repaso y reconocimiento</h2>
-				<p>Repasaremos con un quiz y reconoceremos las tres mejores puntuaciones.</p>
-			</div>
-		</li>
 	</ol>
 	<p class="journey-note">
-		Al inscribirnos, conservamos nuestros datos en este navegador. Más adelante participaremos en desafíos y un quiz en vivo; también podremos consultar el contenido a nuestro ritmo.
+		Al inscribirnos, conservamos nuestros datos en este navegador. Cada sesión termina con un laboratorio guiado, y podremos volver al contenido a nuestro ritmo.
 	</p>
 </div>
 
@@ -118,7 +110,7 @@
 	}
 
 	@container (min-width: 60rem) {
-		.journey-track { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+		.journey-track { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 		.journey-stop { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
 		.stop-card { min-height: 10rem; }
 		.journey-stop:not(:last-child)::after {

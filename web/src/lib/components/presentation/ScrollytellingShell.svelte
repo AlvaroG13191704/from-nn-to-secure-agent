@@ -29,7 +29,7 @@
 	const panels = [
 		{ id: panelIds[0], eyebrow: 'Bienvenida', title: 'De Neuronas a Agentes Seguros', copy: 'Vamos a descubrir cómo aprenden los modelos, construir agentes y comprender cómo protegerlos. Conectaremos las matemáticas que ya conocemos con herramientas que podemos crear.' },
 		{ id: panelIds[1], eyebrow: 'Quién soy', title: 'Soy Álvaro. Construyamos conocimiento juntos.', copy: 'Soy Senior AI Engineer en Deloitte Guatemala. Trabajo con aprendizaje profundo, modelos de lenguaje, agentes, RAG y sistemas backend.' },
-		{ id: panelIds[2], eyebrow: 'El taller', title: 'Conectemos fundamentos y aplicaciones.', copy: 'Durante dos sesiones de dos horas combinaremos explicaciones, demostraciones visuales y desafíos breves.' }
+		{ id: panelIds[2], eyebrow: 'El taller', title: 'Conectemos fundamentos y aplicaciones.', copy: 'Durante dos sesiones de dos horas combinaremos explicaciones, demostraciones visuales y laboratorios guiados.' }
 	];
 
 	// The four slides of the workshop, in teaching order; the introduction is the current page.
