@@ -164,11 +164,11 @@
 										<div class="bio-grid" role="group" aria-label="Experiencia del facilitador">
 									<div class="bio-item">
 										<h2>Formación</h2>
-										<p class="mt-2 text-muted">Me formé en Ingeniería en Ciencias y Sistemas en la USAC y obtuve el certificado profesional en PyTorch de DeepLearning.AI.</p>
+										<p class="mt-2 text-muted">Me formé en Ingeniería en Ciencias y Sistemas en la USAC.</p>
 									</div>
 									<div class="bio-item">
 										<h2>Comunidad y enseñanza</h2>
-										<p class="mt-2 text-muted">He sido auxiliar docente, instructor, creador de contenido y ponente. También formo parte de Cloud Native Guatemala.</p>
+										<p class="mt-2 text-muted">He sido auxiliar docente, creador de contenido y ponente en diversas comunidades. (IEEE, CONESCAPAN, entre otras)</p>
 									</div>
 										</div>
 									{/if}
