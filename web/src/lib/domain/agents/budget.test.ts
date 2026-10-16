@@ -19,7 +19,7 @@ test('agreed limits: $10 cap with a stop margin, $0.25 per student, short calls 
 	assert.equal(BUDGET_LIMITS.globalCapUsd, 10);
 	assert.equal(BUDGET_LIMITS.globalStopUsd, 9.5);
 	assert.equal(BUDGET_LIMITS.studentCapUsd, 0.25);
-	assert.equal(BUDGET_LIMITS.maxOutputTokens, 1024);
+	assert.equal(BUDGET_LIMITS.maxOutputTokens, 2048);
 	assert.equal(BUDGET_LIMITS.maxSteps, 6);
 	assert.equal(BUDGET_LIMITS.requestsPerMinute, 10);
 });

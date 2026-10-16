@@ -10,7 +10,8 @@ export const BUDGET_LIMITS = {
 	globalStopUsd: 9.5,
 	studentCapUsd: 0.25,
 	// Gemini 3.8 Flash cannot disable thinking; thinking tokens count against this limit too.
-	maxOutputTokens: 1024,
+	// At 1024 a real run spent 965 thinking tokens and the JSON action was cut off.
+	maxOutputTokens: 2048,
 	maxSteps: 6,
 	requestsPerMinute: 10
 } as const;

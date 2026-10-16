@@ -115,3 +115,16 @@ test('a tool call with missing arguments is rejected with the names of the missi
 	assert.deepEqual(buildActionSchema(['regulation-rag']).required, ['accion', 'herramienta', 'argumentos']);
 	assert.deepEqual(buildActionSchema([]).required, ['accion']);
 });
+
+test('a run is scored on success, extra blocks and extra steps', async () => {
+	const { scoreRun, MISSIONS: missions } = await import('./missions.ts');
+	const library = missions.find((mission) => mission.id === 'library');
+	const outcome = { answer: 'Hay 2 de Cálculo diferencial (Stewart); el sábado cierra a las 12:00.', toolCalls: ['buscar_catalogo', 'horario_biblioteca'], sentEmails: [] };
+	const lean = scoreRun(library, outcome, library.neededBlocks, 3);
+	assert.equal(lean.success, true);
+	assert.equal(lean.points, 100);
+	const heavy = scoreRun(library, outcome, [...library.neededBlocks, 'calculator', 'send-email'], 5);
+	assert.deepEqual(heavy.unnecessary, ['calculator', 'send-email']);
+	assert.equal(heavy.points, 100 - 2 * 10 - 2 * 5);
+	assert.equal(scoreRun(library, { ...outcome, toolCalls: [] }, library.neededBlocks, 1).points, 0);
+});

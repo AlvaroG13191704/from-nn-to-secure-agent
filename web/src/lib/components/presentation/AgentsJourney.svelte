@@ -7,6 +7,7 @@
 	import TokenBudgetCalculator from '#lib/components/visualizations/agents/TokenBudgetCalculator.svelte';
 	import RagPipeline from '#lib/components/visualizations/agents/RagPipeline.svelte';
 	import RagExplorer from '#lib/components/visualizations/agents/RagExplorer.svelte';
+	import AgentLab from './AgentLab.svelte';
 	import { BUDGET_LIMITS, formatUsd } from '#lib/domain/agents/budget.js';
 
 	const pieces = [
@@ -131,7 +132,15 @@
 	<p class="eyebrow">Lo que sigue</p>
 	<h2 id="puente-agentes-title">Ahora te toca construir tu agente</h2>
 	<p>En el laboratorio vas a elegir bloques (skills, herramientas, conexiones y guardrails) para resolver tres misiones con un modelo real. No gana quien use más bloques, sino quien cumpla la misión de forma segura y gastando menos tokens.</p>
-	<a class="back-home" href="/device-check">Revisa tu computadora antes del laboratorio →</a>
+	<a class="back-home" href="/device-check">¿Aún no revisas tu computadora? Hazlo aquí →</a>
+</section>
+
+<AgentLab />
+
+<section class="story-card bridge" aria-labelledby="cierre-agentes-title">
+	<p class="eyebrow">Para cerrar</p>
+	<h2 id="cierre-agentes-title">De una neurona a un agente que actúa</h2>
+	<p>Empezamos multiplicando entradas por pesos. Entrenamos una red, la convertimos en un modelo de lenguaje y hoy la rodeamos de herramientas, memoria y límites. El modelo es solo una pieza: lo que decide si un agente es útil y seguro es el harness que tú diseñas.</p>
 </section>
 
 <footer class="story-card sources" aria-labelledby="fuentes-agentes-title">
