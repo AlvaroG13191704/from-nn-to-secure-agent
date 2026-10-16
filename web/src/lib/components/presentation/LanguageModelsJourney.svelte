@@ -284,7 +284,7 @@
 		<li><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noreferrer">Jay Alammar, «The Illustrated Transformer»: explicación visual paso a paso</a></li>
 		<li><a href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noreferrer">Transformer Explainer: explora un GPT-2 real en el navegador</a></li>
 	</ul>
-	<a class="back-home" href="/">Volver a la introducción ↑</a>
+	<a class="back-home" href="/agents">Continuar con agentes →</a>
 </footer>
 </div>
 

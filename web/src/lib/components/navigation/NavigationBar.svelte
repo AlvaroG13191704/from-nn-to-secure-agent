@@ -14,7 +14,8 @@
 	const slides = [
 		{ href: '/', number: 1, label: 'Introducción' },
 		{ href: '/deep-learning', number: 2, label: 'Deep Learning' },
-		{ href: '/language-models', number: 3, label: 'Lenguaje y LLMs' }
+		{ href: '/language-models', number: 3, label: 'Lenguaje y LLMs' },
+		{ href: '/agents', number: 4, label: 'Agentes' }
 	];
 	const currentSlide = $derived(slides.find((slide) => slide.href === page.url.pathname));
 
@@ -90,7 +91,7 @@
 	.slide-menu button { border: 1px solid var(--color-line); border-radius: 999px; background: white; padding: 0.45rem 0.8rem; color: var(--color-ink); font-size: 0.85rem; font-weight: 800; cursor: pointer; white-space: nowrap; }
 	.slide-menu-list { position: absolute; top: calc(100% + 0.5rem); right: 0; display: grid; gap: 0.2rem; min-width: 14rem; margin: 0; padding: 0.4rem; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-surface); box-shadow: var(--shadow-panel); list-style: none; }
 	.slide-menu-list a { width: 100%; }
-	@media (min-width: 1100px) {
+	@media (min-width: 1240px) {
 		.slide-links { display: flex; }
 		.slide-menu { display: none; }
 	}

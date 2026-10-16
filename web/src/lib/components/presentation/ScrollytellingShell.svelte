@@ -7,7 +7,7 @@
 	import WorkshopJourney from './WorkshopJourney.svelte';
 	import TopicLearningSequence from './TopicLearningSequence.svelte';
 
-	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models'; children?: Snippet } = $props();
+	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models' | 'agents'; children?: Snippet } = $props();
 	let shell = $state<HTMLElement>();
 	let track = $state<HTMLDivElement>();
 	let reducedMotion = $state(false);
@@ -115,7 +115,10 @@
 {#if mode !== 'introduction'}
 	<main class="deep-learning-shell">
 		<div class="deep-learning-topline">
-			{#if mode === 'language-models'}
+			{#if mode === 'agents'}
+				<a class="back-link" href="/language-models" aria-label="Volver al recorrido de lenguaje y LLMs">← Volver a lenguaje y LLMs</a>
+				<span class="chapter-count">Recorrido 4 · Agentes</span>
+			{:else if mode === 'language-models'}
 				<a class="back-link" href="/deep-learning" aria-label="Volver al recorrido de Deep Learning">← Volver a Deep Learning</a>
 				<span class="chapter-count">Recorrido 3 · Lenguaje y LLMs</span>
 			{:else}

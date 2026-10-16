@@ -39,5 +39,6 @@ export function isRateLimited(requestTimes: number[], now: number, limit: number
 }
 
 export function formatUsd(value: number) {
-	return `$${value >= 0.01 ? value.toFixed(2) : value.toFixed(4)}`;
+	if (value > 0 && value < 0.0001) return '< $0.0001';
+	return `$${value >= 0.01 || value === 0 ? value.toFixed(2) : value.toFixed(4)}`;
 }

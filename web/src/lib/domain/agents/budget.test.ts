@@ -57,4 +57,6 @@ test('rate limit counts requests in the last minute only', () => {
 test('costs format as small dollar amounts', () => {
 	assert.equal(formatUsd(0.25), '$0.25');
 	assert.equal(formatUsd(0.00412), '$0.0041');
+	assert.equal(formatUsd(0.000024), '< $0.0001');
+	assert.equal(formatUsd(0), '$0.00');
 });
