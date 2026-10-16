@@ -101,3 +101,17 @@ test('a reply that is valid JSON but not an action object is reported as invalid
 	assert.equal(events.at(-1).type, 'done');
 	assert.equal(events.at(-1).answer, 'Hecho.');
 });
+
+test('a tool call with missing arguments is rejected with the names of the missing fields', async () => {
+	const { brain, requests } = scriptedBrain([
+		{ accion: 'usar_herramienta', herramienta: 'buscar_reglamento', argumentos: {} },
+		{ accion: 'usar_herramienta', herramienta: 'buscar_reglamento', argumentos: { consulta: 'faltas asistencia' } }
+	]);
+	const events = await collect(runAgent({ blocks: ['regulation-rag'], goal: 'x', brain }));
+	assert.ok(events.some((event) => event.type === 'blocked' && event.reason === 'missing-arguments'));
+	assert.match(requests[1].messages.at(-1).text, /consulta/);
+	assert.deepEqual(events.at(-1).toolCalls, ['buscar_reglamento']);
+	assert.ok(buildActionSchema(['regulation-rag']).properties.argumentos.properties.consulta.description);
+	assert.deepEqual(buildActionSchema(['regulation-rag']).required, ['accion', 'herramienta', 'argumentos']);
+	assert.deepEqual(buildActionSchema([]).required, ['accion']);
+});
