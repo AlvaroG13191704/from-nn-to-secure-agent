@@ -121,7 +121,7 @@
 
 <style>
 	.prompt-anatomy { margin-top: 1.5rem; padding: clamp(1rem, 2.5vw, 1.75rem); border: 1px solid #d9e1eb; border-radius: 1rem; background: #f8fbff; }
-	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	h3 { margin: 0 0 .65rem; color: #17253a; font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
 	h4 { margin: 0 0 .5rem; color: #17253a; font-size: 1.2rem; }
 	h5 { margin: 0 0 .4rem; color: #17253a; font-size: 1.1rem; }

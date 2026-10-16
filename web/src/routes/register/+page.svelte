@@ -68,7 +68,7 @@
 <main class="min-h-screen px-5 pb-16 pt-28 sm:px-8 sm:pt-32">
 	<section class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-start" aria-labelledby="registration-title">
 		<div class="space-y-5">
-			<p class="text-sm font-bold uppercase tracking-[0.16em] text-accent">Participación en vivo</p>
+			<p class="text-sm font-bold text-accent">Participación en vivo</p>
 			<h1 id="registration-title" class="max-w-2xl text-4xl font-bold tracking-tight text-ink sm:text-5xl">
 				Me sumo al taller
 			</h1>
@@ -85,7 +85,7 @@
 			{#if currentSession.registration && !editing}
 				<div class="space-y-5" aria-labelledby="saved-registration-title">
 					<div class="space-y-2">
-						<p class="text-sm font-bold uppercase tracking-wide text-success">Inscripción guardada</p>
+						<p class="text-sm font-bold text-success">Inscripción guardada</p>
 						<h2 id="saved-registration-title" class="text-2xl font-bold text-ink">Hola, {currentSession.registration.name.split(' ')[0]}</h2>
 						<p class="text-base leading-relaxed text-muted">Tu carnet está registrado en este navegador. No necesitas volver a ingresarlo para continuar.</p>
 					</div>

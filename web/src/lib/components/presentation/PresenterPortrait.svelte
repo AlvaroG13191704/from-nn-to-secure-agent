@@ -25,12 +25,12 @@
 </figure>
 
 <style>
-	.portrait { position: relative; width: 100%; max-width: 25rem; aspect-ratio: 4 / 5; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-line); border-radius: 1.5rem; background: var(--color-accent-soft); }
+	.portrait { position: relative; width: 100%; max-width: 25rem; aspect-ratio: 4 / 5; margin: 0 auto; overflow: hidden; border: 1px solid var(--color-line); border-top: 4px solid var(--color-ink); border-radius: 0 0 var(--radius-panel) var(--radius-panel); background: var(--color-canvas); }
 	img { width: 100%; height: 100%; object-fit: cover; opacity: 0; }
 	img.loaded { opacity: 1; }
-	.placeholder { position: absolute; inset: 0 0 4rem; display: grid; align-content: center; justify-items: center; padding: 1.5rem; color: var(--color-accent); }
+	.placeholder { position: absolute; inset: 0 0 4rem; display: grid; align-content: center; justify-items: center; padding: 1.5rem; color: var(--color-muted); }
 	.placeholder svg { width: 75%; max-width: 12rem; }
 	.placeholder p { margin-top: 1rem; font-weight: 700; }
 	.placeholder span { margin-top: 0.5rem; font-size: 0.875rem; }
-	figcaption { position: absolute; bottom: 0; width: 100%; padding: 1rem; background: var(--color-surface); text-align: center; font-weight: 600; }
+	figcaption { position: absolute; bottom: 0; width: 100%; padding: 0.85rem 1rem; border-top: 1px solid var(--color-line); background: var(--color-surface); color: var(--color-ink); font-family: var(--font-serif); font-weight: 600; text-align: center; }
 </style>

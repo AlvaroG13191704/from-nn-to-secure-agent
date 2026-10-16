@@ -121,7 +121,7 @@
 
 <style>
 	.rag-pipeline { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
-	.kicker { margin: 0 0 0.4rem; color: #0f766e; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+	.kicker { margin: 0 0 0.4rem; color: #0f766e; font-size: 0.78rem; font-weight: 800; }
 	h3 { margin: 0 0 0.75rem; color: #17253a; font-size: clamp(1.2rem, 2.4vw, 1.6rem); }
 	p { margin: 0; color: #52627a; line-height: 1.6; }
 	.why, .flow { padding: 1.1rem; border: 1px solid #d9e1eb; border-radius: 1rem; background: white; }

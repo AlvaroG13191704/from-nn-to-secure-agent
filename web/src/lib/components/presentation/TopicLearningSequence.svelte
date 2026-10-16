@@ -36,72 +36,80 @@
 	});
 </script>
 
-<section class="mt-12 border-t border-line pt-8" aria-labelledby="concept-sequence-title">
-	<p class="font-semibold uppercase tracking-[0.16em] text-accent">Fundamentos conectados</p>
-	<h2 id="concept-sequence-title" class="mt-2 text-3xl font-bold tracking-tight text-ink">Siete ideas, una ruta de aprendizaje</h2>
-	<p class="mt-3 max-w-3xl text-reading text-muted">Seguiremos un recorrido, no una escalera obligatoria: la IA engloba al ML y el deep learning; el NLP puede usar reglas o modelos, y los agentes combinan distintas técnicas.</p>
+<section class="concepts" aria-labelledby="concept-sequence-title">
+	<h2 id="concept-sequence-title">Siete ideas, una ruta de aprendizaje</h2>
+	<p class="concepts-lead">Seguiremos un recorrido, no una escalera obligatoria: la IA engloba al ML y el deep learning; el NLP puede usar reglas o modelos, y los agentes combinan distintas técnicas.</p>
 
-	<div bind:this={sequence} class="mt-7 space-y-5">
+	<div bind:this={sequence} class="concept-list">
 		{#each topics as topic, index (topic.id)}
-			<article class="topic-card" data-topic={topic.id} aria-labelledby={`${topic.id}-heading`}>
-				<div class="topic-heading">
-					<span class="topic-number" aria-hidden="true">{index + 1}</span>
-					<h3 id={`${topic.id}-heading`} class="text-xl font-bold text-ink">{topic.title}</h3>
-				</div>
-				<div class="topic-content">
-					<p class="text-muted">{topic.summary}</p>
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<div class="diagram-scroll" role="region" tabindex="0" aria-label={`Visualización de ${topic.title}`}>
-						<p class="diagram-hint">Podemos deslizar el diagrama hacia los lados para verlo completo.</p>
-						<ConceptDiagram topic={topic.kind} active={active && visibleTopic === topic.id} {reducedMotion} />
+			<article class="topic" data-topic={topic.id} aria-labelledby={`${topic.id}-heading`}>
+				<span class="topic-number" aria-hidden="true">{index + 1}</span>
+				<div class="topic-body">
+					<h3 id={`${topic.id}-heading`}>{topic.title}</h3>
+					<div class="topic-content">
+						<p class="topic-summary">{topic.summary}</p>
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<div class="diagram-scroll" role="region" tabindex="0" aria-label={`Visualización de ${topic.title}`}>
+							<p class="diagram-hint">Podemos deslizar el diagrama hacia los lados para verlo completo.</p>
+							<ConceptDiagram topic={topic.kind} active={active && visibleTopic === topic.id} {reducedMotion} />
+						</div>
 					</div>
+					{#if topic.kind === 'ml'}<MachineLearningOverview active={active && visibleTopic === topic.id} {reducedMotion} />{/if}
 				</div>
-				{#if topic.kind === 'ml'}<MachineLearningOverview active={active && visibleTopic === topic.id} {reducedMotion} />{/if}
 			</article>
 		{/each}
 	</div>
 </section>
 
 <style>
-	.topic-card {
-		padding: clamp(1rem, 2vw, 1.5rem);
-		border: 1px solid var(--color-line);
-		border-radius: 1.25rem;
-		background: var(--color-canvas);
+	.concepts { margin-top: clamp(2.5rem, 4vw, 4rem); padding-top: clamp(1.5rem, 3vw, 2.5rem); border-top: 1px solid var(--color-line); }
+	.concepts h2 { margin: 0; color: var(--color-ink); font-size: clamp(1.75rem, 2.6vw, 2.75rem); font-weight: 600; line-height: 1.12; letter-spacing: -0.01em; }
+	.concepts-lead { max-width: 68ch; margin: 0.75rem 0 0; color: #2b3a55; font-size: var(--text-reading); line-height: 1.6; }
+
+	.concept-list { margin-top: clamp(1.5rem, 2.5vw, 2.5rem); }
+
+	/* Each idea is a numbered textbook entry: serif numeral in the margin, explanation beside its diagram. */
+	.topic {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: clamp(1rem, 2vw, 2rem);
+		padding: clamp(1.25rem, 2.5vw, 2.25rem) 0;
+		border-top: 1px solid var(--color-line);
 		scroll-margin-block: 1rem;
 	}
 
-	.topic-heading {
-		display: flex;
-		align-items: center;
-		gap: 0.85rem;
+	.topic-number {
+		min-width: 1.5ch;
+		color: #b9c6ea;
+		font-family: var(--font-serif);
+		font-size: clamp(2.25rem, 3.5vw, 3.75rem);
+		font-weight: 600;
+		line-height: 0.9;
+		font-variant-numeric: lining-nums;
 	}
 
-	.topic-number {
-		display: grid;
-		flex: 0 0 2.5rem;
-		width: 2.5rem;
-		height: 2.5rem;
-		place-items: center;
-		border-radius: 9999px;
-		background: var(--color-primary-soft);
-		color: var(--color-primary);
-		font-weight: 700;
-	}
+	.topic-body { min-width: 0; }
+	.topic h3 { margin: 0; color: var(--color-ink); font-size: clamp(1.35rem, 1.9vw, 1.9rem); font-weight: 600; line-height: 1.2; }
 
 	.topic-content {
 		display: grid;
-		grid-template-columns: minmax(14rem, 0.85fr) minmax(0, 1.15fr);
+		grid-template-columns: minmax(0, 1fr);
 		align-items: center;
-		gap: 1rem;
+		gap: clamp(1rem, 2.5vw, 2.75rem);
 		margin-top: 0.85rem;
+	}
+
+	.topic-summary { max-width: 68ch; margin: 0; color: #2b3a55; font-size: 1.05rem; line-height: 1.7; }
+
+	@media (min-width: 900px) {
+		.topic-content { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
 	}
 
 	.diagram-scroll { min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; }
 	.diagram-hint { display: none; color: var(--color-muted); font-size: 0.875rem; }
-	@media (max-width: 640px) { .diagram-hint { display: block; position: sticky; left: 0; } }
-
-	@media (max-width: 720px) {
-		.topic-content { grid-template-columns: 1fr; }
+	@media (max-width: 640px) {
+		.diagram-hint { display: block; position: sticky; left: 0; }
+		.topic { grid-template-columns: minmax(0, 1fr); }
+		.topic-number { margin-bottom: 0.5rem; }
 	}
 </style>

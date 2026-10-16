@@ -219,7 +219,7 @@
 
 <style>
 	.embedding-lab { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
-	.kicker { margin: 0 0 0.4rem; color: #0f766e; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+	.kicker { margin: 0 0 0.4rem; color: #0f766e; font-size: 0.78rem; font-weight: 800; }
 	h3 { margin: 0 0 0.5rem; color: #17253a; font-size: clamp(1.25rem, 2.4vw, 1.7rem); }
 	h4 { margin: 0 0 0.5rem; color: #17253a; font-size: 1rem; }
 	p { margin: 0; color: #52627a; line-height: 1.6; }

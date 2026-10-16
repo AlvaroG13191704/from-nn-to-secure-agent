@@ -404,7 +404,7 @@
 
 <style>
 	.lab { margin: 0 0 1.5rem; padding: clamp(1.25rem, 3.4vw, 3rem); border: 1px solid var(--color-line, #dbe4ee); border-radius: var(--radius-panel, 1.5rem); background: var(--color-surface, #fff); box-shadow: var(--shadow-panel, 0 12px 32px rgb(23 37 58 / 8%)); scroll-margin-top: 5.75rem; }
-	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; }
 	.lab h2 { margin: 0 0 1rem; color: var(--color-ink, #17253a); font-size: clamp(1.7rem, 3.5vw, 2.75rem); line-height: 1.12; letter-spacing: -.03em; }
 	.lab > p { color: var(--color-muted, #52627a); line-height: 1.65; }
 	h3 { margin: 0 0 .5rem; color: #17253a; font-size: clamp(1.1rem, 2vw, 1.35rem); }
@@ -433,7 +433,7 @@
 	.mission-tabs small { color: #52627a; font-weight: 650; }
 	.goal { margin: .6rem 0 .2rem; color: #17253a; line-height: 1.55; overflow-wrap: anywhere; }
 	.group { margin-top: .85rem; }
-	.group-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.group-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: .5rem; }
 	.chip { display: grid; gap: .2rem; padding: .55rem .75rem; border-radius: .8rem; text-align: left; transition: background-color .2s ease, border-color .2s ease; }
 	.chip strong { font-size: .93rem; }

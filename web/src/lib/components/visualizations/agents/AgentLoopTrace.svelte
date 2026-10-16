@@ -197,7 +197,7 @@
 
 <style>
 	.loop-trace { margin-top: 1.5rem; padding: clamp(1rem, 2.5vw, 1.75rem); border: 1px solid #d9e1eb; border-radius: 1rem; background: #f8fbff; }
-	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	h3 { margin: 0 0 .65rem; color: #17253a; font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
 	p { max-width: 76ch; color: #52627a; line-height: 1.6; }
 	.recorded { display: inline-block; padding: .3rem .75rem; border-radius: 999px; background: #ccfbf1; color: #134e4a; font-weight: 800; }

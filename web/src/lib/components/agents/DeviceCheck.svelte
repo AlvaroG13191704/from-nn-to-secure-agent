@@ -69,9 +69,10 @@
 	});
 </script>
 
-<section class="check-card" aria-labelledby="check-title">
-	<p class="eyebrow">Paso 1</p>
-	<h2 id="check-title">Revisa tu computadora</h2>
+<div class="device-check">
+<div class="device-check__steps">
+<section class="lesson step" aria-labelledby="check-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">1</span><h2 id="check-title"><span class="sr-only">Paso 1: </span>Revisa tu computadora</h2></div>
 	<p>Voy a preguntarle a tu navegador si puede usar Gemini Nano. No se envía ningún dato a internet.</p>
 	<button class="primary" type="button" onclick={check} disabled={phase === 'checking' || phase === 'downloading' || phase === 'testing'}>
 		{phase === 'checking' ? 'Revisando…' : selection ? 'Revisar otra vez' : 'Revisar mi computadora'}
@@ -90,9 +91,8 @@
 </section>
 
 {#if selection && (selection.status === 'needs-download' || selection.status === 'downloading' || phase === 'downloading')}
-	<section class="check-card" aria-labelledby="download-title">
-		<p class="eyebrow">Paso 2</p>
-		<h2 id="download-title">Descarga Gemini Nano</h2>
+	<section class="lesson step" aria-labelledby="download-title">
+		<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2</span><h2 id="download-title"><span class="sr-only">Paso 2: </span>Descarga Gemini Nano</h2></div>
 		<p>Chrome descarga el modelo una sola vez y lo comparte entre páginas. Hazlo en casa, con la computadora conectada a la corriente y una conexión estable.</p>
 		<button class="primary" type="button" onclick={download} disabled={phase === 'downloading'}>{phase === 'downloading' ? 'Descargando…' : 'Descargar Gemini Nano'}</button>
 		{#if phase === 'downloading'}
@@ -103,9 +103,8 @@
 {/if}
 
 {#if selection?.status === 'ready'}
-	<section class="check-card" aria-labelledby="try-title">
-		<p class="eyebrow">Paso 2</p>
-		<h2 id="try-title">Haz una pregunta de prueba</h2>
+	<section class="lesson step" aria-labelledby="try-title">
+		<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2</span><h2 id="try-title"><span class="sr-only">Paso 2: </span>Haz una pregunta de prueba</h2></div>
 		<p>Voy a pedirle a Gemini Nano una respuesta en formato JSON, igual que hará el harness de tu agente.</p>
 		<button class="primary" type="button" onclick={tryNano} disabled={phase === 'testing'}>{phase === 'testing' ? 'Pensando…' : 'Probar Gemini Nano'}</button>
 		{#if test}
@@ -124,8 +123,9 @@
 {/if}
 
 {#if errorMessage}<p class="error" role="alert">{errorMessage}</p>{/if}
+</div>
 
-<section class="check-card" aria-labelledby="requirements-title">
+<section class="lesson lesson--closing requirements-sheet" aria-labelledby="requirements-title">
 	<h2 id="requirements-title">Requisitos de Gemini Nano</h2>
 	<ul class="requirements">
 		<li><strong>Navegador:</strong> Google Chrome {NANO_REQUIREMENTS.minChromeVersion} o superior en Windows 10/11, macOS 13+, Linux o Chromebook Plus. No funciona en celulares.</li>
@@ -142,36 +142,43 @@
 		</ul>
 	</details>
 </section>
+</div>
 
 <style>
-	.check-card { margin: 0 0 1.25rem; padding: clamp(1.25rem, 3vw, 2.25rem); border: 1px solid var(--color-line); border-radius: var(--radius-panel); background: var(--color-surface); box-shadow: var(--shadow-panel); }
-	.eyebrow { margin: 0 0 0.6rem; color: var(--color-accent); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
-	h2 { margin: 0 0 0.75rem; color: var(--color-ink); font-size: clamp(1.4rem, 3vw, 2rem); }
-	h3 { margin: 0 0 0.4rem; color: var(--color-ink); font-size: 1.25rem; }
-	p { max-width: 70ch; margin: 0 0 1rem; color: var(--color-muted); line-height: 1.65; }
-	.primary { border: 0; border-radius: 999px; background: var(--color-primary); padding: 0.75rem 1.2rem; color: white; font: inherit; font-weight: 800; cursor: pointer; }
-	.primary:hover { background: #1e40af; }
+	/* Steps on the left, requirements beside them on a wide screen. */
+	.device-check { display: grid; gap: 0 clamp(1.5rem, 3vw, 3rem); align-items: start; }
+	.device-check__steps { min-width: 0; }
+	@media (min-width: 1100px) {
+		.device-check { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+		.requirements-sheet { position: sticky; top: 5.5rem; }
+	}
+	.step .lesson__head { margin-bottom: 1rem; }
+	.requirements-sheet h2 { margin: 0 0 1rem; color: var(--color-ink); }
+	h3 { margin: 0 0 0.4rem; color: var(--color-ink); font-size: 1.3rem; font-weight: 600; }
+	p { max-width: 70ch; margin: 0 0 1rem; color: #2b3a55; font-size: 1.05rem; line-height: 1.65; }
+	.primary { min-height: 3rem; border: 1px solid var(--color-primary); border-radius: 0.5rem; background: var(--color-primary); padding: 0.65rem 1.35rem; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+	.primary:hover { border-color: #1a42b0; background: #1a42b0; }
 	.primary:disabled { cursor: progress; opacity: 0.6; }
-	.previous { margin-top: 0.9rem; font-size: 0.9rem; }
-	.result { margin-top: 1.25rem; padding: 1rem 1.1rem; border-left: 4px solid var(--color-primary); border-radius: 0 0.9rem 0.9rem 0; background: #eff6ff; }
+	.previous { margin-top: 0.9rem; color: var(--color-muted); font-size: 0.95rem; }
+	.result { margin-top: 1.25rem; padding: 1rem 1.2rem; border-left: 4px solid var(--color-primary); background: #f1f4fd; }
 	.result.nano { border-color: var(--color-accent); background: var(--color-accent-soft); }
 	.result p:last-child { margin: 0; color: var(--color-ink); }
-	.result-label { margin: 0 0 0.3rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+	.result-label { margin: 0 0 0.3rem; color: var(--color-muted); font-size: 0.95rem; font-weight: 700; }
 	progress { display: block; width: 100%; height: 0.9rem; margin-top: 1rem; accent-color: var(--color-accent); }
 	.progress-text { margin-top: 0.4rem; font-weight: 700; }
-	.test-result { margin-top: 1.1rem; padding: 1rem; border: 1px solid var(--color-line); border-radius: 0.9rem; background: #fbfdff; }
+	.test-result { margin-top: 1.1rem; padding: 1rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: var(--color-canvas); }
 	.test-result p { color: var(--color-ink); }
 	.test-result dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.6rem; margin: 0 0 0.8rem; }
-	.test-result dl div { padding: 0.6rem; border-radius: 0.6rem; background: white; }
-	.test-result dt { color: var(--color-muted); font-size: 0.78rem; font-weight: 700; }
-	.test-result dd { margin: 0.2rem 0 0; color: var(--color-ink); font-size: 1.05rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-	.small { margin: 0; font-size: 0.88rem; }
-	.error { padding: 0.9rem 1rem; border-left: 4px solid #b91c1c; border-radius: 0 0.8rem 0.8rem 0; background: #fef2f2; color: #991b1b; }
-	.requirements { display: grid; gap: 0.5rem; margin: 0 0 1rem; padding-left: 1.2rem; color: var(--color-muted); line-height: 1.55; }
+	.test-result dl div { padding: 0.6rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: var(--color-surface); }
+	.test-result dt { color: var(--color-muted); font-size: 0.85rem; font-weight: 700; }
+	.test-result dd { margin: 0.2rem 0 0; color: var(--color-ink); font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+	.small { margin: 0; color: var(--color-muted); font-size: 0.92rem; }
+	.error { margin: 0 0 2rem; padding: 1rem 1.2rem; border-left: 4px solid #b91c1c; background: #fef2f2; color: #991b1b; }
+	.requirements { display: grid; gap: 0.6rem; margin: 0 0 1.25rem; padding-left: 1.2rem; color: #2b3a55; line-height: 1.6; }
 	.requirements strong { color: var(--color-ink); }
-	details { padding: 0.8rem 1rem; border: 1px solid var(--color-line); border-radius: 0.8rem; background: #f8fbff; }
-	summary { color: var(--color-primary); font-weight: 800; cursor: pointer; }
-	details ul { display: grid; gap: 0.4rem; margin: 0.7rem 0 0; padding-left: 1.2rem; color: var(--color-muted); }
-	button:focus-visible, summary:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
-	@media (max-width: 640px) { .test-result dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	details { padding: 0.8rem 1rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: var(--color-canvas); }
+	summary { color: var(--color-primary); font-weight: 700; cursor: pointer; }
+	details ul { display: grid; gap: 0.4rem; margin: 0.7rem 0 0; padding-left: 1.2rem; color: #2b3a55; line-height: 1.55; }
+	code { overflow-wrap: anywhere; }
+	@media (max-width: 1280px) { .test-result dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>

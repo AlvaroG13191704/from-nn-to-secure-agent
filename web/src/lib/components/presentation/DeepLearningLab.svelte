@@ -197,7 +197,7 @@
 		box-shadow: var(--shadow-panel, 0 12px 32px rgb(23 37 58 / 8%));
 		scroll-margin-top: 5.75rem;
 	}
-	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; }
 	.lab h2 { margin: 0 0 1rem; color: var(--color-ink, #17253a); font-size: clamp(1.7rem, 3.5vw, 2.75rem); line-height: 1.12; letter-spacing: -.03em; }
 	.lab > p:not(.eyebrow) { color: var(--color-muted, #52627a); line-height: 1.65; }
 	.glossary-link a { color: #1d4ed8; font-weight: 750; text-underline-offset: .15em; }
@@ -225,7 +225,7 @@
 	.carousel-status { color:#52627a; font-size:.85rem; font-weight:750; }
 	.lab-stage { margin-top:.6rem; border-top:1px solid #dbe4ee; padding:1.1rem 0 .5rem; animation:stage-enter .22s ease-out both; }
 	@keyframes stage-enter { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
-	.stage-label { margin-bottom:.35rem; color:#0f766e; font-size:.78rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+	.stage-label { margin-bottom:.35rem; color:#0f766e; font-size:.78rem; font-weight:800; }
 	.lab-stage h3 { margin-bottom:.65rem; }
 	.lab-stage > p:not(.stage-label) { max-width:75ch; }
 	.stage-guide { display:grid; gap:.65rem; margin:.85rem 0 1.1rem; }

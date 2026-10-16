@@ -123,7 +123,7 @@
 	.heading { display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:.6rem 1.5rem; }
 	.heading > div { flex:1 1 18rem; }
 	.heading > p { flex:1 1 20rem; margin:.3rem 0; color:#334155; }
-	.kicker { margin:0 0 .35rem; color:#0f766e; font-size:.76rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
+	.kicker { margin:0 0 .35rem; color:#0f766e; font-size:.76rem; font-weight:850; }
 	h3 { margin:0; color:#17253a; font-size:clamp(1.35rem,2.4vw,2rem); }
 	.legend { margin:.9rem 0 1rem; color:#334155; font-weight:650; }
 	.legend-teal { color:#0f766e; font-size:1.2rem; }
