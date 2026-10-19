@@ -5,79 +5,26 @@
 	import PerceptronWalkthrough from '#lib/components/visualizations/PerceptronWalkthrough.svelte';
 	import NonlinearLearningDemo from '#lib/components/visualizations/NonlinearLearningDemo.svelte';
 	import MlpLayerWalkthrough from '#lib/components/visualizations/MlpLayerWalkthrough.svelte';
-	import ChainRuleWalkthrough from '#lib/components/visualizations/ChainRuleWalkthrough.svelte';
+	import GradientDescent1D from '#lib/components/visualizations/GradientDescent1D.svelte';
 	import BackpropWalkthrough from '#lib/components/visualizations/BackpropWalkthrough.svelte';
 	import LossLandscape3D from '#lib/components/visualizations/LossLandscape3D.svelte';
 
 	const learningPhases = [
 		{ number: '01', title: 'Pasada hacia adelante', detail: 'La red transforma las entradas y produce una predicción.' },
 		{ number: '02', title: 'Medir la pérdida', detail: 'Comparamos la predicción con la respuesta esperada.' },
-		{ number: '03', title: 'Pasada hacia atrás', detail: 'La regla de la cadena atribuye el error a cada parámetro.' },
+		{ number: '03', title: 'Pasada hacia atrás', detail: 'La señal de error regresa por la red y le asigna a cada parámetro su parte de la corrección.' },
 		{ number: '04', title: 'Actualizar parámetros', detail: 'El optimizador mueve pesos y sesgos para reducir la pérdida.' }
 	];
 
-	const curvePath = Array.from({ length: 81 }, (_, index) => {
-		const weight = 1 + index * 0.1;
-		const x = 70 + (weight - 1) * 60;
-		const loss = 0.5 * (2 * weight - 10) ** 2;
-		const y = 250 - loss * 7;
-		return `${index === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-	}).join(' ');
-
-	let weight = $state(3);
-	let playing = $state(false);
 	let reducedMotion = $state(false);
 	let decorativeMotionPaused = $state(false);
-	let intervalId: ReturnType<typeof setInterval> | undefined;
-	let loss = $derived(0.5 * (2 * weight - 10) ** 2);
-	let gradient = $derived(4 * weight - 20);
-
-	function pointX(value: number) {
-		return 70 + (value - 1) * 60;
-	}
-
-	function pointY(value: number) {
-		return 250 - (0.5 * (2 * value - 10) ** 2) * 7;
-	}
-
-	function stopAnimation() {
-		if (intervalId !== undefined) clearInterval(intervalId);
-		intervalId = undefined;
-		playing = false;
-	}
-
-	function step() {
-		weight = Math.min(5, weight - 0.1 * gradient);
-		if (Math.abs(weight - 5) < 0.005) {
-			weight = 5;
-			stopAnimation();
-		}
-	}
-
-	function play() {
-		if (playing || reducedMotion) return;
-		if (weight >= 5) weight = 3;
-		playing = true;
-		intervalId = setInterval(step, 650);
-	}
-
-	function replay() {
-		stopAnimation();
-		weight = 3;
-	}
 
 	onMount(() => {
 		const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-		const syncMotion = () => {
-			reducedMotion = preference.matches;
-			if (reducedMotion) stopAnimation();
-		};
+		const syncMotion = () => (reducedMotion = preference.matches);
 		syncMotion();
 		preference.addEventListener('change', syncMotion);
-		return () => {
-			preference.removeEventListener('change', syncMotion);
-			stopAnimation();
-		};
+		return () => preference.removeEventListener('change', syncMotion);
 	});
 </script>
 
@@ -166,7 +113,7 @@
 		<div><dt><code>y, ŷ</code></dt><dd><var>y</var> es la respuesta esperada; <var>ŷ</var> (“y con sombrero”) es la predicción del modelo.</dd></div>
 		<div><dt><code>L</code></dt><dd>La pérdida: un número que resume cuánto se aleja la predicción de la respuesta esperada.</dd></div>
 		<div><dt><code>η</code></dt><dd>“Eta”, la tasa de aprendizaje: cuánto cambia un peso en una actualización.</dd></div>
-		<div><dt><code>∂L/∂w</code></dt><dd>La derivada parcial: indica cómo cambia la pérdida cuando cambia el peso, manteniendo el resto del cálculo como está.</dd></div>
+		<div><dt><code>gradiente</code></dt><dd>La lista de señales de ajuste: para cada peso, cuánto y en qué dirección cambia la pérdida si ese peso se mueve un poco.</dd></div>
 		<div><dt><code>∈ ℝ</code></dt><dd><strong>x ∈ ℝ</strong> se lee “x pertenece a los reales”: x puede ser cualquier número real, como −2, 0 o 3.5.</dd></div>
 		<div><dt><code>ℝ<sup>m×n</sup></code></dt><dd>Una matriz de <var>m</var> filas y <var>n</var> columnas, cuyos elementos son números reales. Por ejemplo, ℝ<sup>2×3</sup> tiene 2 filas y 3 columnas.</dd></div>
 		<div><dt><code>w<sup>T</sup>, e², ½</code></dt><dd><sup>T</sup> indica transpuesta; el exponente 2 significa “al cuadrado”; ½ significa “la mitad”.</dd></div>
@@ -217,7 +164,7 @@
 			<figcaption><b>Figura 2.5.</b> Una capa oculta de tres neuronas, primero una por una y después como una sola multiplicación de matrices.</figcaption>
 		</figure>
 	</div>
-	<div class="next-question"><p>¿Para qué tantas neuronas? Cada una aprende a fijarse en algo distinto, y la activación permite combinarlas en fronteras curvas. Lo comprobaremos con diez puntos en 2.11. Primero veamos cómo aprende la red.</p></div>
+	<div class="next-question"><p>¿Para qué tantas neuronas? Cada una aprende a fijarse en algo distinto, y la activación permite combinarlas en fronteras curvas. Lo comprobaremos con diez puntos en 2.9. Primero veamos cómo aprende la red.</p></div>
 </section>
 
 <section class="lesson lesson--wide" id="arquitecturas" data-lesson="Arquitecturas y parámetros" data-number="2.5" aria-labelledby="arquitecturas-title">
@@ -272,120 +219,92 @@
 	</div>
 </section>
 
-<section class="lesson" id="cadena" data-lesson="Regla de la cadena" data-number="2.7" aria-labelledby="cadena-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.7</span><h2 id="cadena-title">Seguimos la corrección por el mismo camino, pero al revés</h2></div>
+<section class="lesson" id="gradiente" data-lesson="Descenso de gradiente" data-number="2.7" aria-labelledby="gradiente-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.7</span><h2 id="gradiente-title">El descenso de gradiente baja la montaña de la pérdida</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
-			<p>Al predecir, la información avanza de los pesos a la predicción y después a la pérdida. Si el resultado no coincide con lo esperado, comenzamos por esa diferencia y enviamos una señal de corrección hacia atrás por las conexiones que participaron.</p>
-			<div class="equation">señal para un peso = señal que vuelve × influencia de su conexión</div>
-			<div class="key-idea"><p>Multiplicar las influencias de los tramos es la idea detrás de la <strong>regla de la cadena</strong>. En cálculo se expresa con derivadas; aquí no hace falta calcularlas: seguiremos las flechas y multiplicaremos factores conocidos. La señal todavía no es un peso nuevo.</p></div>
+			<p>Imaginemos que estamos en una montaña con niebla y queremos bajar al valle. No vemos el valle, pero sí sentimos hacia dónde se inclina el suelo bajo nuestros pies. Damos un paso cuesta abajo y repetimos.</p>
+			<p>Empecemos con un solo peso. Para una entrada <var>x = 2</var> y una respuesta <var>y = 10</var>, la predicción es <var>ŷ = 2w</var> y la pérdida es <var>L = ½(2w − 10)²</var>. Con <var>w = 3</var> predecimos 6 en lugar de 10.</p>
+			<ol class="reading-steps">
+				<li><strong>Medimos la pendiente</strong> con el experimento del empujón: movemos <var>w</var> un poquito y vemos cuánto cambia <var>L</var>.</li>
+				<li><strong>Damos un paso en sentido contrario a la pendiente:</strong> <var>w<sub>nuevo</sub> = w − η × pendiente</var>.</li>
+				<li><strong>Repetimos</strong> hasta que la pendiente sea casi cero: estamos en el fondo del valle.</li>
+			</ol>
+			<div class="definition"><p><strong>η, el tamaño del paso:</strong> si es pequeño llegamos despacio; si es grande rebotamos de un lado al otro; si es demasiado grande nos salimos del valle. Pruébalo en la figura.</p></div>
 		</div>
 		<figure class="lesson__figure">
-			<ChainRuleWalkthrough />
-			<figcaption><b>Figura 2.8.</b> La regla de la cadena con números: avanzamos de <var>w</var> a la pérdida y regresamos multiplicando la tasa de cambio de cada tramo.</figcaption>
+			<GradientDescent1D />
+			<figcaption><b>Figura 2.8.</b> Un solo peso baja por la curva de pérdida. La recta negra es la pendiente en el punto actual.</figcaption>
 		</figure>
 	</div>
-</section>
-
-<section class="lesson lesson--wide" id="backpropagation" data-lesson="Backpropagation" data-number="2.8" aria-labelledby="backward-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.8</span><h2 id="backward-title">Backpropagation reparte la señal de ajuste</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
-			<p>Primero comparo la predicción con la respuesta esperada. Luego recorro la red en sentido inverso: cada conexión recibe una señal y la multiplica por su factor de influencia. Reutilizo esas señales hasta llegar a todos los pesos y sesgos.</p>
-			<div class="key-idea"><p>En matemáticas, estos factores de ajuste se llaman <strong>gradientes</strong>. Backpropagation los calcula; el descenso del gradiente es el paso posterior que los usa para actualizar la red. No son la misma operación.</p></div>
+			<h3 class="lesson__subhead">Con más pesos, la curva se vuelve un paisaje</h3>
+			<p>Si la red tiene dos pesos, <var>a</var> y <var>b</var>, la pérdida es una superficie: el piso son los valores de los pesos y la altura es la pérdida. Ahora hay una pendiente por cada peso; a esa lista de pendientes la llamamos <strong>gradiente</strong>. Una red real tiene millones de pesos; no podemos dibujarlos, pero la idea es la misma.</p>
+			<p>Este paisaje no es un tazón perfecto: tiene un valle profundo, un valle local menos profundo y pequeños baches. Como solo sentimos la pendiente bajo nuestros pies, el camino depende de dónde empezamos y de cómo damos cada paso.</p>
+		</div>
+		<div class="key-idea"><p><strong>Todos usan la misma regla:</strong> <var>peso<sub>nuevo</sub> = peso − η × pendiente</var>. Lo que cambia entre los tipos de descenso es <strong>con cuántos ejemplos</strong> mido la pendiente y <strong>si recuerdo los pasos anteriores</strong>.</p></div>
+	</div>
+	<div class="lesson__body lesson__body--wide">
+		<figure class="lesson__figure">
+			<LossLandscape3D />
+			<figcaption><b>Figura 2.9.</b> Superficie de pérdida de dos pesos, calculada como el promedio de ocho ejemplos. Cada color de camino es un tipo de descenso de gradiente que parte del mismo punto.</figcaption>
+		</figure>
+	</div>
+	<div class="next-question"><p>Desde el punto 1, el descenso por lotes se queda en el valle local, mientras que el ruido de SGD y la inercia de momentum llegan al valle profundo: ningún optimizador gana siempre. Pero queda un problema: medir la pendiente empujando cada peso por separado sería lentísimo con millones de pesos. ¿Cómo la obtenemos de todos a la vez?</p></div>
+	<div class="key-idea"><p><strong>El objetivo tiene límites:</strong> minimizar la pérdida de entrenamiento no garantiza por sí solo una buena respuesta en datos nuevos. Por eso también medimos el rendimiento en datos que no se usaron para ajustar los parámetros.</p></div>
+</section>
+
+<section class="lesson" id="backpropagation" data-lesson="Backpropagation" data-number="2.8" aria-labelledby="backward-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.8</span><h2 id="backward-title">Backpropagation obtiene todas las pendientes en un solo viaje de regreso</h2></div>
+	<div class="lesson__body">
+		<div class="lesson__text">
+			<p>En lugar de empujar cada peso, hacemos una pasada hacia adelante, medimos el error y enviamos una <strong>señal de ajuste</strong> de regreso por las mismas conexiones. En cada conexión la señal se transforma con una receta corta, y al final cada parámetro tiene su señal: su pendiente.</p>
+			<div class="recipe">
+				<p class="recipe__title">La receta</p>
+				<ol>
+					<li>La señal nace en la salida: <var>señal de ŷ = ŷ − y</var>.</li>
+					<li>Para un peso: <var>señal del peso = señal que llega × lo que entró por esa conexión</var>.</li>
+					<li>Para pasar a la neurona anterior: <var>señal que llega × peso de la conexión</var>.</li>
+					<li>Al cruzar ReLU: si la neurona estaba encendida (<var>z &gt; 0</var>) la señal pasa igual; si estaba apagada, se corta.</li>
+				</ol>
+			</div>
 		</div>
 		<figure class="lesson__figure">
-			<ol class="backward-steps">
-				<li><span>1</span><p><strong>Predigo:</strong> guardo las activaciones de la pasada hacia adelante.</p></li>
-				<li><span>2</span><p><strong>Comparo:</strong> calculo la pérdida usando la respuesta esperada.</p></li>
-				<li><span>3</span><p><strong>Propago:</strong> sigo las conexiones hacia atrás y calculo un factor de ajuste para cada parámetro.</p></li>
-				<li><span>4</span><p><strong>Actualizo:</strong> uso esos factores para dar un paso pequeño con cada peso y sesgo.</p></li>
-			</ol>
-			<figcaption><b>Figura 2.9.</b> Los cuatro pasos de backpropagation y la actualización que le sigue.</figcaption>
+			<div class="single-check">
+				<p class="single-check__title">Comprobación con el peso de 2.7</p>
+				<p>Hacia adelante: <var>ŷ = 3 × 2 = 6</var>.</p>
+				<p>La señal nace: <var>señal de ŷ = 6 − 10 = −4</var>.</p>
+				<p>Por la conexión de <var>w</var> entró <var>x = 2</var>: <var>señal de w = −4 × 2 = <strong>−8</strong></var>.</p>
+				<p class="single-check__result">Es el mismo −8 que medimos con el empujón, pero sin empujar nada: solo multiplicamos números que ya teníamos.</p>
+			</div>
+			<figcaption><b>Figura 2.10.</b> La receta aplicada al ejemplo de un solo peso.</figcaption>
 		</figure>
 	</div>
 	<div class="lesson__body lesson__body--wide">
 		<figure class="lesson__figure">
 			<BackpropWalkthrough />
-			<figcaption><b>Figura 2.10.</b> Backpropagation completo en una red pequeña: cada valor aparece donde se calcula, primero hacia adelante y después hacia atrás, hasta actualizar los siete parámetros.</figcaption>
+			<figcaption><b>Figura 2.11.</b> Backpropagation completo en una red pequeña: cada valor aparece donde se calcula, primero hacia adelante y después hacia atrás, hasta actualizar los siete parámetros.</figcaption>
 		</figure>
 	</div>
+	<div class="glossary-note key-idea"><p><strong>Para quien quiera ir más allá:</strong> en cálculo, la señal de ajuste se llama <em>derivada</em> y la receta se conoce como <em>regla de la cadena</em>. No necesitamos esos nombres para usarla.</p></div>
 </section>
 
-<section class="lesson" id="gradiente" data-lesson="Descenso de gradiente" data-number="2.9" aria-labelledby="gradiente-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.9</span><h2 id="gradiente-title">El descenso de gradiente busca el mínimo</h2></div>
+<section class="lesson lesson--wide" id="comparacion-entrenamiento" data-lesson="Una red aprende" data-number="2.9" aria-labelledby="comparacion-entrenamiento-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.9</span><h2 id="comparacion-entrenamiento-title">Ahora veamos a una red aprender</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
-			<p>Veámoslo con un solo peso. Para una entrada <var>x = 2</var> y una respuesta <var>y = 10</var>, la predicción es <var>ŷ = 2w</var> y usamos <var>L(w) = ½(2w − 10)²</var>. Su mínimo está en <var>w = 5</var>, donde la predicción coincide con el objetivo.</p>
-			<p>Con <var>η = 0.1</var>, el gradiente inicial es <var>∂L/∂w = 4w − 20 = −8</var>. Como es negativo, restarlo aumenta el peso: <var>3 − 0.1(−8) = 3.8</var>. En cada paso la pérdida baja y el peso se acerca a 5.</p>
-			<div class="key-idea"><p><strong>El objetivo tiene límites:</strong> minimizar la pérdida de entrenamiento no garantiza por sí solo una buena respuesta en datos nuevos. Por eso también medimos el rendimiento en datos que no se usaron para ajustar los parámetros.</p></div>
-		</div>
-		<figure class="lesson__figure lesson__figure--sticky">
-			<div class="gradient-demo">
-				<div class="chart-wrap">
-					<svg viewBox="0 0 600 300" role="img" aria-labelledby="loss-plot-title loss-plot-desc">
-						<title id="loss-plot-title">La pérdida disminuye cuando el peso avanza de 3 a 5</title>
-						<desc id="loss-plot-desc">La curva L de w tiene su mínimo en 5. El punto actual se mueve hacia ese mínimo con cada paso de gradiente.</desc>
-						<path d="M70 250H550M70 250V25" fill="none" stroke="#9baec3" stroke-width="2" />
-						<path d={curvePath} fill="none" stroke="#1f4fd1" stroke-width="5" stroke-linecap="round" />
-						<path d="M310 250V20" stroke="#0f6b5e" stroke-width="2" stroke-dasharray="6 7" />
-						<circle cx="310" cy="250" r="7" fill="#0f6b5e" />
-						<circle cx={pointX(weight)} cy={pointY(weight)} r="11" fill="#b7791f" stroke="white" stroke-width="4" />
-						<g fill="#4a5873" font-size="14" font-weight="700"><text x="548" y="276">w</text><text x="25" y="30">L(w)</text><text x="302" y="276">5</text><text x="183" y="276">3</text><text x="324" y="240">mínimo</text></g>
-					</svg>
-				</div>
-				<div class="gradient-readout" aria-live="polite" aria-atomic="true">
-					<p class="readout-label">Estado del paso</p>
-					<div><span>Peso w</span><strong>{weight.toFixed(3)}</strong></div>
-					<div><span>Gradiente ∂L/∂w</span><strong>{gradient.toFixed(3)}</strong></div>
-					<div><span>Pérdida L(w)</span><strong>{loss.toFixed(3)}</strong></div>
-					<p class="update-equation">w<sub>nuevo</sub> = w − 0.1 · ∂L/∂w</p>
-				</div>
-			</div>
-			<div class="controls" role="group" aria-label="Controles de la animación de descenso de gradiente">
-				<button type="button" onclick={playing ? stopAnimation : play} aria-pressed={playing} disabled={reducedMotion && !playing}>{playing ? 'Pausar' : 'Continuar'}</button>
-				<button type="button" class="secondary" onclick={step} disabled={weight >= 5}>Un paso</button>
-				<button type="button" class="secondary" onclick={replay}>Repetir desde w = 3</button>
-				<span class="motion-note">{reducedMotion ? 'Movimiento reducido: usa “Un paso” o “Repetir desde w = 3”.' : 'La animación solo avanza cuando eliges continuar.'}</span>
-			</div>
-			<figcaption><b>Figura 2.11.</b> Un solo peso baja por la curva de pérdida hacia el mínimo en <var>w = 5</var>.</figcaption>
-		</figure>
-	</div>
-</section>
-
-<section class="lesson lesson--wide" id="muchas-dimensiones" data-lesson="Descenso en muchas dimensiones" data-number="2.10" aria-labelledby="muchas-dimensiones-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.10</span><h2 id="muchas-dimensiones-title">Con más pesos, la curva se vuelve un paisaje</h2></div>
-	<div class="lesson__body">
-		<div class="lesson__text">
-			<p>Con un solo peso, la pérdida era una curva. Si la red tiene dos pesos, <var>a</var> y <var>b</var>, la pérdida es una superficie: el piso son los valores de los pesos y la altura es la pérdida. Una red real tiene millones de pesos; no podemos dibujarlos, pero la idea es la misma.</p>
-			<p>Este paisaje no es un tazón perfecto: tiene un valle profundo, un valle local menos profundo y pequeños baches. El gradiente solo ve la pendiente bajo nuestros pies, así que el camino depende de dónde empezamos y de cómo damos cada paso.</p>
-		</div>
-		<div class="key-idea"><p><strong>Todos usan la misma regla</strong> <var>peso<sub>nuevo</sub> = peso − η · gradiente</var>. Lo que cambia entre los tipos de descenso es <strong>con cuántos ejemplos</strong> calculo el gradiente y <strong>si recuerdo los pasos anteriores</strong>.</p></div>
-	</div>
-	<div class="lesson__body lesson__body--wide">
-		<figure class="lesson__figure">
-			<LossLandscape3D />
-			<figcaption><b>Figura 2.12.</b> Superficie de pérdida de dos pesos, calculada como el promedio de ocho ejemplos. Cada color de camino es un tipo de descenso de gradiente que parte del mismo punto.</figcaption>
-		</figure>
-	</div>
-	<div class="next-question"><p>Desde el punto 1, el descenso por lotes se queda en el valle local, mientras que el ruido de SGD y la inercia de momentum llegan al valle profundo. Cambia al punto 2 o pide una nueva tirada: ningún optimizador gana siempre.</p></div>
-</section>
-
-<section class="lesson lesson--wide" id="comparacion-entrenamiento" data-lesson="Una red aprende" data-number="2.11" aria-labelledby="comparacion-entrenamiento-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.11</span><h2 id="comparacion-entrenamiento-title">Ahora veamos a una red aprender</h2></div>
-	<div class="lesson__body">
-		<div class="lesson__text">
-			<p>Ya recorrimos la predicción, la pérdida, el cálculo de gradientes y la actualización de pesos. Ahora voy a repetir ese ciclo sobre diez ejemplos para comparar qué puede aprender una red con y sin activación en su capa oculta.</p>
+			<p>Ya recorrimos la predicción, la pérdida, el viaje de regreso de las señales y la actualización de pesos. Ahora voy a repetir ese ciclo sobre diez ejemplos para comparar qué puede aprender una red con y sin activación en su capa oculta.</p>
 		</div>
 		<figure class="lesson__figure">
 			<NonlinearLearningDemo />
-			<figcaption><b>Figura 2.13.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
+			<figcaption><b>Figura 2.12.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
 		</figure>
 		<div class="next-question"><p>La demostración de diez puntos usa una red 2 → 8 → 1 y muchas actualizaciones. En el laboratorio usaremos una red más pequeña, 2 → 2 → 1: calcularás una rama representativa y verás cómo la misma regla completa la otra antes de actualizar la red.</p></div>
 	</div>
 </section>
 
-<section class="lesson lesson--bare" id="laboratorio" data-lesson="Laboratorio: entrena a mano" data-number="2.12" aria-label="Laboratorio: entrena a mano una red 2 → 2 → 1">
+<section class="lesson lesson--bare" id="laboratorio" data-lesson="Laboratorio: entrena a mano" data-number="2.10" aria-label="Laboratorio: entrena a mano una red 2 → 2 → 1">
 	<DeepLearningLab />
 </section>
 
@@ -472,36 +391,26 @@
 	.phase-card p { margin: 0; color: var(--color-muted); font-size: 0.98rem; line-height: 1.55; }
 	.phase-number { display: grid; width: 2rem; height: 2rem; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--color-ink); color: white; font-family: var(--font-serif); font-size: 0.85rem; font-weight: 600; }
 
-	.backward-steps { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
-	.backward-steps li { display: flex; gap: 0.9rem; align-items: center; padding: 0.8rem 1rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: #fbfcfe; }
-	.backward-steps span { display: grid; width: 2rem; height: 2rem; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--color-ink); color: white; font-family: var(--font-serif); font-weight: 600; }
-	.backward-steps p { margin: 0; color: #2b3a55; line-height: 1.55; }
-	.backward-steps strong { color: var(--color-ink); }
 
-	.gradient-demo { display: grid; gap: 0.75rem; }
-	.chart-wrap { min-width: 0; padding: 0.6rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: #fbfcfe; }
-	.chart-wrap svg { display: block; width: 100%; height: auto; }
-	.gradient-readout { min-width: 0; padding: 1rem 1.1rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: white; }
-	.readout-label { margin: 0 0 0.5rem; color: var(--color-ink); font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; }
-	.gradient-readout > div { display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--color-line); color: var(--color-muted); font-size: 0.95rem; }
-	.gradient-readout strong { color: var(--color-ink); font-variant-numeric: tabular-nums; }
-	.update-equation { margin: 0.8rem 0 0; color: var(--color-primary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; font-weight: 800; }
-	@media (min-width: 1500px) { .gradient-demo { grid-template-columns: minmax(0, 1.6fr) minmax(13rem, 0.8fr); align-items: center; } }
-
-	.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.9rem; }
-	.controls button, .back-home { display: inline-block; padding: 0.7rem 1.05rem; border: 0; border-radius: 0.4rem; background: var(--color-primary); color: white; cursor: pointer; font: inherit; font-size: 0.95rem; font-weight: 800; text-decoration: none; }
-	.controls button:hover, .back-home:hover { background: #193fa8; }
-	.controls button:focus-visible, .back-home:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
-	.controls button.secondary, .back-home.secondary-link { border: 1px solid var(--color-line); background: white; color: var(--color-ink); }
-	.controls button.secondary:hover, .back-home.secondary-link:hover { border-color: var(--color-primary); background: white; color: var(--color-primary); }
-	.controls button:disabled { cursor: not-allowed; opacity: 0.55; }
-	.motion-note { color: var(--color-muted); font-size: 0.9rem; }
+	.back-home { display: inline-block; padding: 0.7rem 1.05rem; border: 0; border-radius: 0.4rem; background: var(--color-primary); color: white; cursor: pointer; font: inherit; font-size: 0.95rem; font-weight: 800; text-decoration: none; }
+	.back-home:hover { background: #193fa8; }
+	.back-home:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
+	.back-home.secondary-link { border: 1px solid var(--color-line); background: white; color: var(--color-ink); }
+	.back-home.secondary-link:hover { border-color: var(--color-primary); background: white; color: var(--color-primary); }
 
 	.lesson--wide .next-question { margin-top: 0; }
 	.sources ul { display: grid; gap: 0.65rem; padding-left: 1.25rem; }
 	.sources a:not(.back-home) { color: var(--color-primary); font-weight: 700; text-underline-offset: 0.18em; }
 	.closing-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
+	.lesson__subhead { margin: 0 0 0.75rem; font-size: 1.45rem; font-weight: 600; }
+	.recipe { margin-top: 1rem; padding: 1rem 1.15rem; border: 1px solid var(--color-line); border-top: 3px solid var(--color-accent); border-radius: 0 0 0.4rem 0.4rem; background: var(--color-surface); }
+	.recipe__title { margin: 0 0 0.4rem; font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; }
+	.recipe ol { display: grid; gap: 0.45rem; margin: 0; padding-left: 1.3rem; list-style: decimal; line-height: 1.5; }
+	.single-check { display: grid; gap: 0.45rem; padding: 1.1rem 1.25rem; border-left: 4px solid var(--color-accent); border-radius: 0.3rem; background: #f3faf8; font-size: 1.1rem; }
+	.single-check p { margin: 0; }
+	.single-check__title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; }
+	.single-check__result { margin-top: 0.35rem !important; color: var(--color-accent); font-weight: 700; }
 	.reading-steps { display: grid; gap: 0.45rem; margin: 1rem 0; padding-left: 1.4rem; line-height: 1.5; list-style: decimal; }
 	.reading-steps li::marker { color: var(--color-primary); font-family: var(--font-serif); font-weight: 600; }
 	.bio-flow { animation: dash-flow 1.8s linear infinite; stroke-dasharray: 5 7; }

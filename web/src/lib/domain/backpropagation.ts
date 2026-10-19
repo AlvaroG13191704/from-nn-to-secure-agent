@@ -1,16 +1,3 @@
-/** Single weight: ŷ = w·x, L = ½(ŷ − y)². Same numbers as the 2.9 curve and the lab. */
-export function calculateChainRuleExample({ input, weight, target, nudge }: { input: number; weight: number; target: number; nudge: number }) {
-	const prediction = weight * input;
-	const loss = 0.5 * (prediction - target) ** 2;
-	const dLossDPrediction = prediction - target;
-	const dPredictionDWeight = input;
-	const gradient = dLossDPrediction * dPredictionDWeight;
-	const nudgedWeight = weight + nudge;
-	const nudgedPrediction = nudgedWeight * input;
-	const nudgedLoss = 0.5 * (nudgedPrediction - target) ** 2;
-	return { prediction, loss, dLossDPrediction, dPredictionDWeight, gradient, nudgedWeight, nudgedPrediction, nudgedLoss };
-}
-
 /**
  * One input, two ReLU hidden neurons, one linear output:
  * z₁ = w₁x + b₁, h₁ = ReLU(z₁); z₂ = w₂x + b₂, h₂ = ReLU(z₂); ŷ = v₁h₁ + v₂h₂ + c; L = ½(ŷ − y)².

@@ -2,20 +2,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculateChainRuleExample, calculateBackpropagation, BACKPROP_EXAMPLE } from './backpropagation.ts';
+import { calculateBackpropagation, BACKPROP_EXAMPLE } from './backpropagation.ts';
 
 const close = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-9, `${actual} !== ${expected}`);
-
-test('chain rule example reproduces the single-weight numbers used in 2.9 and the lab', () => {
-	const result = calculateChainRuleExample({ input: 2, weight: 3, target: 10, nudge: 0.01 });
-	assert.deepEqual(
-		{ prediction: result.prediction, loss: result.loss, dLossDPrediction: result.dLossDPrediction, dPredictionDWeight: result.dPredictionDWeight, gradient: result.gradient },
-		{ prediction: 6, loss: 8, dLossDPrediction: -4, dPredictionDWeight: 2, gradient: -8 }
-	);
-	close(result.nudgedLoss, 7.9202);
-	// The measured change agrees with gradient × nudge to first order.
-	assert.ok(Math.abs(result.nudgedLoss - result.loss - result.gradient * 0.01) < 0.001);
-});
 
 test('backpropagation forward pass of the two-neuron example', () => {
 	const { forward } = calculateBackpropagation(BACKPROP_EXAMPLE);

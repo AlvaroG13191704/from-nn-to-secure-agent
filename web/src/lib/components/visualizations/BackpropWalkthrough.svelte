@@ -10,22 +10,22 @@
 
 	type Step = { phase: 'inicio' | 'adelante' | 'atrás' | 'actualizar'; title: string; general: string; worked: string[]; note: string; fwd?: string[]; back?: string[]; focus?: string[] };
 	const steps: Step[] = [
-		{ phase: 'inicio', title: 'La red antes de calcular', general: `x = ${p.x},  y = ${p.y},  η = ${eta}`, worked: ['Siete parámetros: w₁, b₁, w₂, b₂ (capa oculta) y v₁, v₂, c (salida).'], note: 'Usamos una entrada, dos neuronas ocultas con ReLU y una salida. Queremos que la predicción se acerque a y = 4.' },
+		{ phase: 'inicio', title: 'La red antes de calcular', general: `x = ${p.x},  y = ${p.y},  η = ${eta}`, worked: ['Siete parámetros: w₁, b₁, w₂, b₂ (capa oculta) y v₁, v₂, c (salida).'], note: 'Una entrada, dos neuronas ocultas con ReLU y una salida. Queremos que la predicción se acerque a y = 4. Para dar el paso de descenso necesitamos la señal de ajuste de cada uno de los siete parámetros.' },
 		{ phase: 'adelante', title: 'Neurona oculta 1', general: 'z₁ = w₁·x + b₁,   h₁ = ReLU(z₁)', worked: [`z₁ = ${fmt(p.w1)} × ${p.x} + ${par(p.b1)} = ${fmt(f.z1)}`, `h₁ = ReLU(${fmt(f.z1)}) = ${fmt(f.h1)}`], note: 'Cada neurona hace la suma ponderada que ya conocemos y luego aplica ReLU: si z es positivo lo deja pasar, si es negativo lo vuelve 0.', fwd: ['w1'], focus: ['h1'] },
 		{ phase: 'adelante', title: 'Neurona oculta 2', general: 'z₂ = w₂·x + b₂,   h₂ = ReLU(z₂)', worked: [`z₂ = ${fmt(p.w2)} × ${p.x} + ${par(p.b2)} = ${fmt(f.z2)}`, `h₂ = ReLU(${fmt(f.z2)}) = ${fmt(f.h2)}`], note: 'Guardamos z y h de cada neurona: los necesitaremos al regresar.', fwd: ['w2'], focus: ['h2'] },
 		{ phase: 'adelante', title: 'Neurona de salida', general: 'ŷ = v₁·h₁ + v₂·h₂ + c', worked: [`ŷ = ${fmt(p.v1)} × ${fmt(f.h1)} + ${fmt(p.v2)} × ${fmt(f.h2)} + ${fmt(p.c)} = ${fmt(f.prediction)}`], note: 'La salida combina lo que produjeron las dos neuronas ocultas.', fwd: ['v1', 'v2'], focus: ['y'] },
 		{ phase: 'adelante', title: 'Pérdida', general: 'L = ½ (ŷ − y)²', worked: [`L = ½ (${fmt(f.prediction)} − ${p.y})² = ½ × ${fmt(f.error ** 2)} = ${fmt(f.loss)}`], note: 'Predijimos 2 y esperábamos 4. Ahora comienza el regreso: ¿cuánto contribuyó cada parámetro a este error?', fwd: ['loss'], focus: ['L'] },
-		{ phase: 'atrás', title: 'La señal de error nace en la salida', general: '∂L/∂ŷ = ŷ − y', worked: [`∂L/∂ŷ = ${fmt(f.prediction)} − ${p.y} = ${fmt(g.prediction)}`], note: 'Este es el primer número que viaja hacia atrás. Es negativo: si ŷ subiera, la pérdida bajaría.', back: ['loss'], focus: ['y', 'g-prediction'] },
-		{ phase: 'atrás', title: 'Gradiente del peso v₁', general: '∂L/∂v₁ = ∂L/∂ŷ · h₁', worked: [`∂L/∂v₁ = ${par(g.prediction)} × ${fmt(f.h1)} = ${fmt(g.v1)}`], note: 'Si v₁ sube una unidad, ŷ sube h₁ unidades. Por eso multiplicamos la señal por h₁: lo que llegó por esa conexión.', back: ['v1'], focus: ['g-v1'] },
-		{ phase: 'atrás', title: 'Gradiente del peso v₂', general: '∂L/∂v₂ = ∂L/∂ŷ · h₂', worked: [`∂L/∂v₂ = ${par(g.prediction)} × ${fmt(f.h2)} = ${fmt(g.v2)}`], note: 'Es el doble que el de v₁ porque h₂ = 2 aportó el doble a la predicción. Más participación, más responsabilidad.', back: ['v2'], focus: ['g-v2'] },
-		{ phase: 'atrás', title: 'Gradiente del sesgo c', general: '∂L/∂c = ∂L/∂ŷ · 1', worked: [`∂L/∂c = ${par(g.prediction)} × 1 = ${fmt(g.c)}`], note: 'El sesgo se suma directamente a ŷ, así que recibe la señal completa.', focus: ['g-c'] },
-		{ phase: 'atrás', title: 'La señal entra a la neurona oculta 1', general: '∂L/∂h₁ = ∂L/∂ŷ · v₁', worked: [`∂L/∂h₁ = ${par(g.prediction)} × ${fmt(p.v1)} = ${fmt(g.h1)}`], note: 'Ahora la señal cruza la conexión v₁ en sentido contrario. Esta vez se multiplica por el peso, porque h₁ influye en ŷ a través de v₁.', back: ['v1'], focus: ['g-h1'] },
-		{ phase: 'atrás', title: 'La señal entra a la neurona oculta 2', general: '∂L/∂h₂ = ∂L/∂ŷ · v₂', worked: [`∂L/∂h₂ = ${par(g.prediction)} × ${fmt(p.v2)} = ${fmt(g.h2)}`], note: 'v₂ es pequeño (0.5), así que a la neurona 2 le llega una señal más débil.', back: ['v2'], focus: ['g-h2'] },
-		{ phase: 'atrás', title: 'Atravesamos ReLU', general: '∂L/∂z = ∂L/∂h · ReLU′(z)', worked: [`∂L/∂z₁ = ${par(g.h1)} × 1 = ${fmt(g.z1)}   (z₁ = ${fmt(f.z1)} > 0)`, `∂L/∂z₂ = ${par(g.h2)} × 1 = ${fmt(g.z2)}   (z₂ = ${fmt(f.z2)} > 0)`], note: 'ReLU′ vale 1 cuando z es positivo: la señal pasa intacta. Si z hubiera sido negativo valdría 0 y esa neurona no recibiría corrección.', focus: ['g-z1', 'g-z2'] },
-		{ phase: 'atrás', title: 'Gradientes de w₁ y b₁', general: '∂L/∂w₁ = ∂L/∂z₁ · x,   ∂L/∂b₁ = ∂L/∂z₁ · 1', worked: [`∂L/∂w₁ = ${par(g.z1)} × ${p.x} = ${fmt(g.w1)}`, `∂L/∂b₁ = ${par(g.z1)} × 1 = ${fmt(g.b1)}`], note: 'Llegamos a la primera capa. Es el mismo patrón de siempre: señal que llega × lo que entró por esa conexión.', back: ['w1'], focus: ['g-w1', 'g-b1'] },
-		{ phase: 'atrás', title: 'Gradientes de w₂ y b₂', general: '∂L/∂w₂ = ∂L/∂z₂ · x,   ∂L/∂b₂ = ∂L/∂z₂ · 1', worked: [`∂L/∂w₂ = ${par(g.z2)} × ${p.x} = ${fmt(g.w2)}`, `∂L/∂b₂ = ${par(g.z2)} × 1 = ${fmt(g.b2)}`], note: 'Ya tenemos un gradiente para cada uno de los siete parámetros. Backpropagation terminó; todavía no cambiamos ningún peso.', back: ['w2'], focus: ['g-w2', 'g-b2'] },
-		{ phase: 'actualizar', title: 'Descenso de gradiente: actualizamos los siete parámetros', general: 'θ_nuevo = θ − η · ∂L/∂θ', worked: BACKPROP_PARAMETER_NAMES.map((name) => `${symbol[name]}: ${fmt(p[name])} − ${eta} × ${par(g[name])} = ${fmt(u[name])}`), note: 'Todos los gradientes son negativos, así que todos los parámetros suben un poco. Ahora sí cambia la red.', focus: BACKPROP_PARAMETER_NAMES.map((name) => `p-${name}`) },
-		{ phase: 'adelante', title: 'Comprobamos con los parámetros nuevos', general: 'repetimos la pasada hacia adelante', worked: [`z₁ = ${fmt(n.z1)}, h₁ = ${fmt(n.h1)};  z₂ = ${fmt(n.z2)}, h₂ = ${fmt(n.h2)}`, `ŷ = ${fmt(n.prediction)},  L = ${fmt(n.loss)}   (antes L = ${fmt(f.loss)})`], note: 'La pérdida bajó de 2 a 0.361 en un solo paso. ŷ se pasó un poco de 4: en el siguiente ciclo los gradientes serán positivos y la corregirán hacia abajo.', fwd: ['w1', 'w2', 'v1', 'v2', 'loss'], focus: ['L'] }
+		{ phase: 'atrás', title: 'La señal nace en la salida', general: 'señal de ŷ = ŷ − y', worked: [`señal de ŷ = ${fmt(f.prediction)} − ${p.y} = ${fmt(g.prediction)}`], note: 'Es el error con signo. Negativo significa que ŷ se quedó corto: si ŷ subiera, la pérdida bajaría. Este número viaja hacia atrás.', back: ['loss'], focus: ['y', 'g-prediction'] },
+		{ phase: 'atrás', title: 'Señal del peso v₁', general: 'señal de v₁ = señal que llega × lo que entró por v₁', worked: [`señal de v₁ = ${par(g.prediction)} × h₁ = ${par(g.prediction)} × ${fmt(f.h1)} = ${fmt(g.v1)}`], note: 'Por la conexión v₁ entró h₁ = 1. Cuanto más entró por una conexión, más responsable es su peso del resultado.', back: ['v1'], focus: ['g-v1'] },
+		{ phase: 'atrás', title: 'Señal del peso v₂', general: 'señal de v₂ = señal que llega × lo que entró por v₂', worked: [`señal de v₂ = ${par(g.prediction)} × h₂ = ${par(g.prediction)} × ${fmt(f.h2)} = ${fmt(g.v2)}`], note: 'Es el doble que la de v₁ porque por v₂ entró el doble (h₂ = 2). Más participación, más responsabilidad.', back: ['v2'], focus: ['g-v2'] },
+		{ phase: 'atrás', title: 'Señal del sesgo c', general: 'señal de c = señal que llega × 1', worked: [`señal de c = ${par(g.prediction)} × 1 = ${fmt(g.c)}`], note: 'El sesgo se suma directamente, como si siempre entrara un 1, así que recibe la señal completa.', focus: ['g-c'] },
+		{ phase: 'atrás', title: 'La señal entra a la neurona oculta 1', general: 'señal de h₁ = señal que llega × peso de la conexión', worked: [`señal de h₁ = ${par(g.prediction)} × v₁ = ${par(g.prediction)} × ${fmt(p.v1)} = ${fmt(g.h1)}`], note: 'Ahora la señal cruza la conexión v₁ en sentido contrario para llegar a la neurona. Al cruzar una conexión hacia atrás, se multiplica por su peso.', back: ['v1'], focus: ['g-h1'] },
+		{ phase: 'atrás', title: 'La señal entra a la neurona oculta 2', general: 'señal de h₂ = señal que llega × peso de la conexión', worked: [`señal de h₂ = ${par(g.prediction)} × v₂ = ${par(g.prediction)} × ${fmt(p.v2)} = ${fmt(g.h2)}`], note: 'v₂ es pequeño (0.5), así que a la neurona 2 le llega una señal más débil.', back: ['v2'], focus: ['g-h2'] },
+		{ phase: 'atrás', title: 'Atravesamos ReLU', general: 'si z > 0 la señal pasa igual;  si z ≤ 0 se corta (0)', worked: [`señal de z₁ = ${fmt(g.h1)}   (z₁ = ${fmt(f.z1)} > 0, pasa)`, `señal de z₂ = ${fmt(g.h2)}   (z₂ = ${fmt(f.z2)} > 0, pasa)`], note: 'ReLU deja pasar la señal de las neuronas encendidas. Una neurona apagada (z negativo) no recibe corrección en este ejemplo.', focus: ['g-z1', 'g-z2'] },
+		{ phase: 'atrás', title: 'Señales de w₁ y b₁', general: 'señal de w₁ = señal de z₁ × x,   señal de b₁ = señal de z₁ × 1', worked: [`señal de w₁ = ${par(g.z1)} × ${p.x} = ${fmt(g.w1)}`, `señal de b₁ = ${par(g.z1)} × 1 = ${fmt(g.b1)}`], note: 'Llegamos a la primera capa con la misma receta: señal que llega × lo que entró por esa conexión (aquí, la entrada x).', back: ['w1'], focus: ['g-w1', 'g-b1'] },
+		{ phase: 'atrás', title: 'Señales de w₂ y b₂', general: 'señal de w₂ = señal de z₂ × x,   señal de b₂ = señal de z₂ × 1', worked: [`señal de w₂ = ${par(g.z2)} × ${p.x} = ${fmt(g.w2)}`, `señal de b₂ = ${par(g.z2)} × 1 = ${fmt(g.b2)}`], note: 'Ya tenemos una señal para cada uno de los siete parámetros. Estas señales son el gradiente. Backpropagation terminó; todavía no cambiamos ningún peso.', back: ['w2'], focus: ['g-w2', 'g-b2'] },
+		{ phase: 'actualizar', title: 'Descenso de gradiente: actualizamos los siete parámetros', general: 'nuevo = actual − η × señal', worked: BACKPROP_PARAMETER_NAMES.map((name) => `${symbol[name]}: ${fmt(p[name])} − ${eta} × ${par(g[name])} = ${fmt(u[name])}`), note: 'Es la misma regla de 2.7. Todas las señales son negativas, así que todos los parámetros suben un poco. Ahora sí cambia la red.', focus: BACKPROP_PARAMETER_NAMES.map((name) => `p-${name}`) },
+		{ phase: 'adelante', title: 'Comprobamos con los parámetros nuevos', general: 'repetimos la pasada hacia adelante', worked: [`z₁ = ${fmt(n.z1)}, h₁ = ${fmt(n.h1)};  z₂ = ${fmt(n.z2)}, h₂ = ${fmt(n.h2)}`, `ŷ = ${fmt(n.prediction)},  L = ${fmt(n.loss)}   (antes L = ${fmt(f.loss)})`], note: 'La pérdida bajó de 2 a 0.361 en un solo paso. ŷ se pasó un poco de 4: en el siguiente ciclo las señales serán positivas y la corregirán hacia abajo.', fwd: ['w1', 'w2', 'v1', 'v2', 'loss'], focus: ['L'] }
 	];
 
 	let step = $state(0);
@@ -41,18 +41,18 @@
 	const paramText = (name: keyof typeof symbol) => (updated ? `${symbol[name]} = ${fmt(u[name as 'w1'])}` : `${symbol[name]} = ${fmt(p[name as 'w1'])}`);
 
 	const notebook = [
-		{ key: 'prediction', label: '∂L/∂ŷ' },
-		{ key: 'v1', label: '∂L/∂v₁' },
-		{ key: 'v2', label: '∂L/∂v₂' },
-		{ key: 'c', label: '∂L/∂c' },
-		{ key: 'h1', label: '∂L/∂h₁' },
-		{ key: 'h2', label: '∂L/∂h₂' },
-		{ key: 'z1', label: '∂L/∂z₁' },
-		{ key: 'z2', label: '∂L/∂z₂' },
-		{ key: 'w1', label: '∂L/∂w₁' },
-		{ key: 'b1', label: '∂L/∂b₁' },
-		{ key: 'w2', label: '∂L/∂w₂' },
-		{ key: 'b2', label: '∂L/∂b₂' }
+		{ key: 'prediction', label: 'señal de ŷ' },
+		{ key: 'v1', label: 'señal de v₁' },
+		{ key: 'v2', label: 'señal de v₂' },
+		{ key: 'c', label: 'señal de c' },
+		{ key: 'h1', label: 'señal de h₁' },
+		{ key: 'h2', label: 'señal de h₂' },
+		{ key: 'z1', label: 'señal de z₁' },
+		{ key: 'z2', label: 'señal de z₂' },
+		{ key: 'w1', label: 'señal de w₁' },
+		{ key: 'b1', label: 'señal de b₁' },
+		{ key: 'w2', label: 'señal de w₂' },
+		{ key: 'b2', label: 'señal de b₂' }
 	] as const;
 
 	// Edges: forward solid, backward dashed overlay that flows towards the input.
@@ -105,8 +105,8 @@
 						<rect x="340" y={neuron.cy - 68} width="180" height="136" rx="10" />
 						<text x="430" y={neuron.cy - 34} class="v">z{neuron.n} = {shown(neuron.at, neuron.z)}</text>
 						<text x="430" y={neuron.cy - 8} class="v">h{neuron.n} = {shown(neuron.at, neuron.h)}</text>
-						<text x="430" y={neuron.cy + 24} class="gr" class:visible={showGradient(neuron.id)}>∂L/∂h{neuron.n} = {fmt(neuron.gh)}</text>
-						<text x="430" y={neuron.cy + 50} class="gr" class:visible={showGradient(`z${neuron.n === '₁' ? 1 : 2}`)}>∂L/∂z{neuron.n} = {fmt(neuron.gz)}</text>
+						<text x="430" y={neuron.cy + 24} class="gr" class:visible={showGradient(neuron.id)}>señal h{neuron.n} = {fmt(neuron.gh)}</text>
+						<text x="430" y={neuron.cy + 50} class="gr" class:visible={showGradient(`z${neuron.n === '₁' ? 1 : 2}`)}>señal z{neuron.n} = {fmt(neuron.gz)}</text>
 					</g>
 				{/each}
 
@@ -114,7 +114,7 @@
 				<g class="node" class:focus={isFocus('y') || isFocus('g-prediction')}>
 					<rect x="670" y="220" width="160" height="110" rx="10" />
 					<text x="750" y="262" class="v">ŷ = {shown(3, values.prediction)}</text>
-					<text x="750" y="296" class="gr" class:visible={showGradient('prediction')}>∂L/∂ŷ = {fmt(g.prediction)}</text>
+					<text x="750" y="296" class="gr" class:visible={showGradient('prediction')}>señal ŷ = {fmt(g.prediction)}</text>
 				</g>
 				<g class="node node--loss" class:focus={isFocus('L')}>
 					<rect x="930" y="235" width="140" height="80" rx="10" />
@@ -126,19 +126,19 @@
 
 				<!-- Parameters with their gradients -->
 				{@render pill(228, 180, paramText('w1'), 'param', true, isFocus('p-w1'))}
-				{@render pill(228, 146, `∂L/∂w₁ = ${fmt(g.w1)}`, 'grad', showGradient('w1'), isFocus('g-w1'))}
+				{@render pill(228, 146, `señal w₁ = ${fmt(g.w1)}`, 'grad', showGradient('w1'), isFocus('g-w1'))}
 				{@render pill(228, 352, paramText('w2'), 'param', true, isFocus('p-w2'))}
-				{@render pill(228, 386, `∂L/∂w₂ = ${fmt(g.w2)}`, 'grad', showGradient('w2'), isFocus('g-w2'))}
+				{@render pill(228, 386, `señal w₂ = ${fmt(g.w2)}`, 'grad', showGradient('w2'), isFocus('g-w2'))}
 				{@render pill(375, 80, paramText('b1'), 'param', true, isFocus('p-b1'))}
-				{@render pill(500, 80, `∂L/∂b₁ = ${fmt(g.b1)}`, 'grad', showGradient('b1'), isFocus('g-b1'))}
+				{@render pill(500, 80, `señal b₁ = ${fmt(g.b1)}`, 'grad', showGradient('b1'), isFocus('g-b1'))}
 				{@render pill(375, 470, paramText('b2'), 'param', true, isFocus('p-b2'))}
-				{@render pill(500, 470, `∂L/∂b₂ = ${fmt(g.b2)}`, 'grad', showGradient('b2'), isFocus('g-b2'))}
+				{@render pill(500, 470, `señal b₂ = ${fmt(g.b2)}`, 'grad', showGradient('b2'), isFocus('g-b2'))}
 				{@render pill(605, 190, paramText('v1'), 'param', true, isFocus('p-v1'))}
-				{@render pill(605, 156, `∂L/∂v₁ = ${fmt(g.v1)}`, 'grad', showGradient('v1'), isFocus('g-v1'))}
+				{@render pill(605, 156, `señal v₁ = ${fmt(g.v1)}`, 'grad', showGradient('v1'), isFocus('g-v1'))}
 				{@render pill(605, 360, paramText('v2'), 'param', true, isFocus('p-v2'))}
-				{@render pill(605, 394, `∂L/∂v₂ = ${fmt(g.v2)}`, 'grad', showGradient('v2'), isFocus('g-v2'))}
+				{@render pill(605, 394, `señal v₂ = ${fmt(g.v2)}`, 'grad', showGradient('v2'), isFocus('g-v2'))}
 				{@render pill(760, 190, paramText('c'), 'param', true, isFocus('p-c'))}
-				{@render pill(760, 156, `∂L/∂c = ${fmt(g.c)}`, 'grad', showGradient('c'), isFocus('g-c'))}
+				{@render pill(760, 156, `señal c = ${fmt(g.c)}`, 'grad', showGradient('c'), isFocus('g-c'))}
 			</svg>
 		</div>
 	</div>
@@ -153,9 +153,9 @@
 			{#each current.worked as line, index (index)}<p class="board__worked" class:board__worked--compact={current.worked.length > 3}>{line}</p>{/each}
 			<p class="board__note">{current.note}</p>
 		</div>
-		<aside class="notebook" aria-label="Libreta de gradientes calculados">
-			<p class="notebook__title">Libreta de gradientes</p>
-			<p class="notebook__hint">Cada gradiente nuevo usa uno que ya está en la libreta: backpropagation reutiliza su propio trabajo.</p>
+		<aside class="notebook" aria-label="Libreta de señales calculadas">
+			<p class="notebook__title">Libreta de señales</p>
+			<p class="notebook__hint">Cada señal nueva usa una que ya está en la libreta: backpropagation reutiliza su propio trabajo.</p>
 			<dl>
 				{#each notebook as item (item.key)}
 					<div class:filled={step >= gradientStep[item.key]} class:current={step === gradientStep[item.key]}>
@@ -225,7 +225,7 @@
 	.board__phase--forward { background: var(--color-primary-soft); color: var(--color-primary); }
 	.board__phase--back { background: var(--color-accent-soft); color: var(--color-accent); }
 	.board__phase--update { background: var(--color-ochre-soft); color: #7a4f12; }
-	.board__general { margin-top: 0.45rem !important; color: var(--color-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; }
+	.board__general { margin-top: 0.45rem !important; color: var(--color-muted); font-weight: 700; }
 	.board__worked { margin-top: 0.2rem !important; color: #0b4f45; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(0.95rem, 1.4vw, 1.2rem); font-weight: 800; overflow-wrap: anywhere; }
 	.board__note { margin-top: 0.55rem !important; color: var(--color-muted); line-height: 1.5; }
 
