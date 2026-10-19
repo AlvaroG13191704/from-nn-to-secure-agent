@@ -4,6 +4,10 @@
 	import ActivationFunctionsExplorer from '#lib/components/visualizations/ActivationFunctionsExplorer.svelte';
 	import PerceptronWalkthrough from '#lib/components/visualizations/PerceptronWalkthrough.svelte';
 	import NonlinearLearningDemo from '#lib/components/visualizations/NonlinearLearningDemo.svelte';
+	import MlpLayerWalkthrough from '#lib/components/visualizations/MlpLayerWalkthrough.svelte';
+	import ChainRuleWalkthrough from '#lib/components/visualizations/ChainRuleWalkthrough.svelte';
+	import BackpropWalkthrough from '#lib/components/visualizations/BackpropWalkthrough.svelte';
+	import LossLandscape3D from '#lib/components/visualizations/LossLandscape3D.svelte';
 
 	const learningPhases = [
 		{ number: '01', title: 'Pasada hacia adelante', detail: 'La red transforma las entradas y produce una predicción.' },
@@ -196,35 +200,24 @@
 </section>
 
 <section class="lesson" id="mlp" data-lesson="Perceptrón multicapa" data-number="2.4" aria-labelledby="mlp-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.4</span><h2 id="mlp-title">Un MLP convierte vectores con matrices</h2></div>
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.4</span><h2 id="mlp-title">Un MLP pone varias neuronas a trabajar en equipo</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
-			<p>Una sola transformación lineal tiene límites: no puede separar todos los patrones, como XOR. Al apilar capas lineales y activaciones no lineales, el MLP construye representaciones cada vez más útiles.</p>
-			<div class="next-question"><p>La multiplicación transforma cada muestra; el sesgo se suma a cada fila del lote. La activación <var>φ</var> permite que varias capas representen relaciones no lineales. Más adelante voy a comprobarlo con diez puntos: ¿podrá una frontera recta separarlos? Primero veamos cómo aprende la red.</p></div>
+			<p>Una sola neurona solo puede trazar una frontera recta entre dos grupos. Algunos patrones no se separan con una recta: en XOR, los puntos de un mismo grupo quedan en esquinas opuestas.</p>
+			<p>La solución es usar varias neuronas. Una <strong>capa oculta</strong> es un grupo de neuronas que miran las mismas entradas, cada una con sus propios pesos. La siguiente capa combina sus respuestas. Eso es un <strong>perceptrón multicapa</strong> (MLP).</p>
+			<ol class="reading-steps">
+				<li>Cada neurona hace el mismo cálculo de 2.3: multiplica, suma el sesgo y aplica la activación.</li>
+				<li>Guardo los pesos de toda la capa en una tabla <var>W</var>: cada columna es una neurona.</li>
+				<li>Así, la capa completa es una sola operación: <var>h = ReLU(x · W + b)</var>.</li>
+			</ol>
+			<div class="definition"><p><strong>Matriz:</strong> una tabla de números con filas y columnas. “2×3” significa 2 filas y 3 columnas.</p></div>
 		</div>
 		<figure class="lesson__figure">
-			<div class="visual-panel">
-				<svg viewBox="0 0 690 260" role="img" aria-labelledby="mlp-svg-title mlp-svg-desc">
-					<title id="mlp-svg-title">Red densa de entrada, capa oculta y salida</title>
-					<desc id="mlp-svg-desc">Dos entradas se conectan con dos neuronas ocultas y estas con una neurona de salida.</desc>
-					<g class="network-flow" fill="none" stroke="#b7c3d4" stroke-width="2"><path d="M98 75 315 80M98 75 315 180M98 185 315 80M98 185 315 180M355 80 575 130M355 180 575 130"/></g>
-					<g fill="#dfe7fb" stroke="#1f4fd1" stroke-width="3"><circle cx="80" cy="75" r="25"/><circle cx="80" cy="185" r="25"/><circle cx="335" cy="80" r="25"/><circle cx="335" cy="180" r="25"/><circle cx="595" cy="130" r="28"/></g>
-					<g fill="#14213d" font-size="16" font-weight="700" text-anchor="middle"><text x="80" y="81">x₁</text><text x="80" y="191">x₂</text><text x="335" y="86">h₁</text><text x="335" y="186">h₂</text><text x="595" y="136">ŷ</text></g>
-					<g fill="#4a5873" font-size="14" font-weight="700" text-anchor="middle"><text x="80" y="237">entrada</text><text x="335" y="250">capa oculta</text><text x="595" y="184">salida</text></g>
-				</svg>
-			</div>
-			<div class="matrix-example">
-				<div><span class="matrix-label">lote de entrada</span><code>X ∈ ℝ<sup>2×2</sup></code><small>2 muestras × 2 características</small></div>
-				<span class="operator">×</span>
-				<div><span class="matrix-label">pesos</span><code>W ∈ ℝ<sup>2×2</sup></code><small>2 entradas × 2 neuronas</small></div>
-				<span class="operator">+</span>
-				<div><span class="matrix-label">sesgo</span><code>b ∈ ℝ<sup>1×2</sup></code><small>un sesgo por neurona</small></div>
-				<span class="operator">→</span>
-				<div><span class="matrix-label">activación</span><code>A = φ(XW + b)</code><small>2 muestras × 2 activaciones</small></div>
-			</div>
-			<figcaption><b>Figura 2.5.</b> Una red densa con dos entradas, una capa oculta y una salida; debajo, las dimensiones de cada matriz en un lote de dos muestras.</figcaption>
+			<MlpLayerWalkthrough />
+			<figcaption><b>Figura 2.5.</b> Una capa oculta de tres neuronas, primero una por una y después como una sola multiplicación de matrices.</figcaption>
 		</figure>
 	</div>
+	<div class="next-question"><p>¿Para qué tantas neuronas? Cada una aprende a fijarse en algo distinto, y la activación permite combinarlas en fronteras curvas. Lo comprobaremos con diez puntos en 2.11. Primero veamos cómo aprende la red.</p></div>
 </section>
 
 <section class="lesson lesson--wide" id="arquitecturas" data-lesson="Arquitecturas y parámetros" data-number="2.5" aria-labelledby="arquitecturas-title">
@@ -288,22 +281,13 @@
 			<div class="key-idea"><p>Multiplicar las influencias de los tramos es la idea detrás de la <strong>regla de la cadena</strong>. En cálculo se expresa con derivadas; aquí no hace falta calcularlas: seguiremos las flechas y multiplicaremos factores conocidos. La señal todavía no es un peso nuevo.</p></div>
 		</div>
 		<figure class="lesson__figure">
-			<div class="visual-panel">
-				<svg viewBox="0 0 660 190" role="img" aria-labelledby="chain-svg-title chain-svg-desc">
-					<title id="chain-svg-title">Camino de la predicción y regreso de la señal de corrección</title>
-					<desc id="chain-svg-desc">La información avanza del peso a la predicción y a la pérdida. Si hay diferencia con el objetivo, la señal de corrección recorre las mismas conexiones en sentido inverso.</desc>
-					<g fill="none" stroke="#9baec3" stroke-width="4"><path d="M160 75h130M380 75h130"/></g><g class="gradient-flow" fill="none" stroke="#0f6b5e" stroke-width="3" stroke-dasharray="7 7"><path d="M510 112H380M290 112H160"/></g>
-					<g fill="#dfe7fb" stroke="#1f4fd1" stroke-width="3"><rect x="75" y="44" width="85" height="62" rx="10"/><rect x="290" y="44" width="90" height="62" rx="10"/><rect x="510" y="44" width="85" height="62" rx="10"/></g>
-					<g fill="#14213d" font-size="17" font-weight="700" text-anchor="middle"><text x="117" y="82">peso w</text><text x="335" y="82">predicción ŷ</text><text x="552" y="82">pérdida L</text></g>
-					<g fill="#4a5873" font-size="14" font-weight="700" text-anchor="middle"><text x="225" y="34">hacia adelante</text><text x="225" y="148">señal hacia atrás</text><text x="445" y="34">calcular L</text></g>
-				</svg>
-			</div>
-			<figcaption><b>Figura 2.8.</b> La predicción avanza del peso a la pérdida; la señal de corrección vuelve por las mismas conexiones.</figcaption>
+			<ChainRuleWalkthrough />
+			<figcaption><b>Figura 2.8.</b> La regla de la cadena con números: avanzamos de <var>w</var> a la pérdida y regresamos multiplicando la tasa de cambio de cada tramo.</figcaption>
 		</figure>
 	</div>
 </section>
 
-<section class="lesson" id="backpropagation" data-lesson="Backpropagation" data-number="2.8" aria-labelledby="backward-title">
+<section class="lesson lesson--wide" id="backpropagation" data-lesson="Backpropagation" data-number="2.8" aria-labelledby="backward-title">
 	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.8</span><h2 id="backward-title">Backpropagation reparte la señal de ajuste</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
@@ -318,6 +302,12 @@
 				<li><span>4</span><p><strong>Actualizo:</strong> uso esos factores para dar un paso pequeño con cada peso y sesgo.</p></li>
 			</ol>
 			<figcaption><b>Figura 2.9.</b> Los cuatro pasos de backpropagation y la actualización que le sigue.</figcaption>
+		</figure>
+	</div>
+	<div class="lesson__body lesson__body--wide">
+		<figure class="lesson__figure">
+			<BackpropWalkthrough />
+			<figcaption><b>Figura 2.10.</b> Backpropagation completo en una red pequeña: cada valor aparece donde se calcula, primero hacia adelante y después hacia atrás, hasta actualizar los siete parámetros.</figcaption>
 		</figure>
 	</div>
 </section>
@@ -358,26 +348,44 @@
 				<button type="button" class="secondary" onclick={replay}>Repetir desde w = 3</button>
 				<span class="motion-note">{reducedMotion ? 'Movimiento reducido: usa “Un paso” o “Repetir desde w = 3”.' : 'La animación solo avanza cuando eliges continuar.'}</span>
 			</div>
-			<figcaption><b>Figura 2.10.</b> Un solo peso baja por la curva de pérdida hacia el mínimo en <var>w = 5</var>.</figcaption>
+			<figcaption><b>Figura 2.11.</b> Un solo peso baja por la curva de pérdida hacia el mínimo en <var>w = 5</var>.</figcaption>
 		</figure>
 	</div>
 </section>
 
-<section class="lesson lesson--wide" id="comparacion-entrenamiento" data-lesson="Una red aprende" data-number="2.10" aria-labelledby="comparacion-entrenamiento-title">
-	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.10</span><h2 id="comparacion-entrenamiento-title">Ahora veamos a una red aprender</h2></div>
+<section class="lesson lesson--wide" id="muchas-dimensiones" data-lesson="Descenso en muchas dimensiones" data-number="2.10" aria-labelledby="muchas-dimensiones-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.10</span><h2 id="muchas-dimensiones-title">Con más pesos, la curva se vuelve un paisaje</h2></div>
+	<div class="lesson__body">
+		<div class="lesson__text">
+			<p>Con un solo peso, la pérdida era una curva. Si la red tiene dos pesos, <var>a</var> y <var>b</var>, la pérdida es una superficie: el piso son los valores de los pesos y la altura es la pérdida. Una red real tiene millones de pesos; no podemos dibujarlos, pero la idea es la misma.</p>
+			<p>Este paisaje no es un tazón perfecto: tiene un valle profundo, un valle local menos profundo y pequeños baches. El gradiente solo ve la pendiente bajo nuestros pies, así que el camino depende de dónde empezamos y de cómo damos cada paso.</p>
+		</div>
+		<div class="key-idea"><p><strong>Todos usan la misma regla</strong> <var>peso<sub>nuevo</sub> = peso − η · gradiente</var>. Lo que cambia entre los tipos de descenso es <strong>con cuántos ejemplos</strong> calculo el gradiente y <strong>si recuerdo los pasos anteriores</strong>.</p></div>
+	</div>
+	<div class="lesson__body lesson__body--wide">
+		<figure class="lesson__figure">
+			<LossLandscape3D />
+			<figcaption><b>Figura 2.12.</b> Superficie de pérdida de dos pesos, calculada como el promedio de ocho ejemplos. Cada color de camino es un tipo de descenso de gradiente que parte del mismo punto.</figcaption>
+		</figure>
+	</div>
+	<div class="next-question"><p>Desde el punto 1, el descenso por lotes se queda en el valle local, mientras que el ruido de SGD y la inercia de momentum llegan al valle profundo. Cambia al punto 2 o pide una nueva tirada: ningún optimizador gana siempre.</p></div>
+</section>
+
+<section class="lesson lesson--wide" id="comparacion-entrenamiento" data-lesson="Una red aprende" data-number="2.11" aria-labelledby="comparacion-entrenamiento-title">
+	<div class="lesson__head"><span class="lesson__number" aria-hidden="true">2.11</span><h2 id="comparacion-entrenamiento-title">Ahora veamos a una red aprender</h2></div>
 	<div class="lesson__body">
 		<div class="lesson__text">
 			<p>Ya recorrimos la predicción, la pérdida, el cálculo de gradientes y la actualización de pesos. Ahora voy a repetir ese ciclo sobre diez ejemplos para comparar qué puede aprender una red con y sin activación en su capa oculta.</p>
 		</div>
 		<figure class="lesson__figure">
 			<NonlinearLearningDemo />
-			<figcaption><b>Figura 2.11.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
+			<figcaption><b>Figura 2.13.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
 		</figure>
 		<div class="next-question"><p>La demostración de diez puntos usa una red 2 → 8 → 1 y muchas actualizaciones. En el laboratorio usaremos una red más pequeña, 2 → 2 → 1: calcularás una rama representativa y verás cómo la misma regla completa la otra antes de actualizar la red.</p></div>
 	</div>
 </section>
 
-<section class="lesson lesson--bare" id="laboratorio" data-lesson="Laboratorio: entrena a mano" data-number="2.11" aria-label="Laboratorio: entrena a mano una red 2 → 2 → 1">
+<section class="lesson lesson--bare" id="laboratorio" data-lesson="Laboratorio: entrena a mano" data-number="2.12" aria-label="Laboratorio: entrena a mano una red 2 → 2 → 1">
 	<DeepLearningLab />
 </section>
 
@@ -441,11 +449,6 @@
 	.callout-grid strong { color: var(--color-ink); font-family: var(--font-serif); font-size: 1.1rem; }
 	.callout-grid p { margin: 0.4rem 0 0; color: var(--color-muted); font-size: 0.98rem; line-height: 1.55; }
 
-	.matrix-example { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.6rem; margin-top: 1rem; }
-	.matrix-example > div { display: grid; min-width: 9rem; gap: 0.3rem; padding: 0.85rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: white; }
-	.matrix-label, .matrix-example small { color: var(--color-muted); font-size: 0.85rem; }
-	.matrix-example code { color: var(--color-primary); font-size: 1.1rem; font-weight: 800; }
-	.operator { color: var(--color-accent); font-size: 1.4rem; font-weight: 800; }
 
 	.architecture-extension { margin-top: 1.5rem; padding: 0.9rem 1.1rem; border: 1px solid var(--color-line); border-radius: 0.5rem; background: #fbfcfe; }
 	.architecture-extension summary { color: var(--color-primary); font-weight: 800; cursor: pointer; }
@@ -499,23 +502,19 @@
 	.sources a:not(.back-home) { color: var(--color-primary); font-weight: 700; text-underline-offset: 0.18em; }
 	.closing-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
-	.bio-flow, .network-flow, .gradient-flow { animation: dash-flow 1.8s linear infinite; }
-	.bio-flow, .network-flow { stroke-dasharray: 5 7; }
+	.reading-steps { display: grid; gap: 0.45rem; margin: 1rem 0; padding-left: 1.4rem; line-height: 1.5; list-style: decimal; }
+	.reading-steps li::marker { color: var(--color-primary); font-family: var(--font-serif); font-weight: 600; }
+	.bio-flow { animation: dash-flow 1.8s linear infinite; stroke-dasharray: 5 7; }
 	@keyframes dash-flow { to { stroke-dashoffset: -24; } }
-	.decorative-motion-paused .bio-flow,
-	.decorative-motion-paused .network-flow,
-	.decorative-motion-paused .gradient-flow { animation-play-state: paused !important; }
+	.decorative-motion-paused .bio-flow { animation-play-state: paused !important; }
 
 	@media (max-width: 900px) {
 		.symbol-grid, .architecture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	}
 	@media (max-width: 560px) {
 		.symbol-grid, .architecture-grid, .parameter-contrast { grid-template-columns: 1fr; }
-		.matrix-example { justify-content: stretch; }
-		.matrix-example > div { flex: 1 1 40%; min-width: 0; }
-		.operator { flex: 0 0 1.2rem; text-align: center; }
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.bio-flow, .network-flow, .gradient-flow { animation: none; }
+		.bio-flow { animation: none; }
 	}
 </style>
