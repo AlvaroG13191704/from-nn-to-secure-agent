@@ -54,7 +54,7 @@
 </dialog>
 
 <style>
-	.approval { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: clamp(1rem, 3vw, 1.5rem); border: 2px solid #b45309; border-radius: 1rem; background: #fff; color: #17253a; box-shadow: 0 24px 48px rgb(23 37 58 / 25%); overflow-wrap: anywhere; }
+	.approval { width: min(36rem, calc(100vw - 2rem)); margin: auto; max-height: calc(100dvh - 2rem); padding: clamp(1rem, 3vw, 1.5rem); border: 2px solid #b45309; border-radius: 1rem; background: #fff; color: #17253a; box-shadow: 0 24px 48px rgb(23 37 58 / 25%); overflow-wrap: anywhere; }
 	.approval::backdrop { background: rgb(15 23 42 / 55%); }
 	.eyebrow { margin: 0 0 .4rem; color: #b45309; font-size: .78rem; font-weight: 800; }
 	h3 { margin: 0 0 .6rem; font-size: clamp(1.15rem, 2.4vw, 1.45rem); }

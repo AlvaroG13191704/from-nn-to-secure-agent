@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import ConfirmDialog from '#lib/components/ConfirmDialog.svelte';
 	import { getLocalSession } from '#lib/state/session-context.js';
 	import TrainingNetworkDiagram from '#lib/components/visualizations/TrainingNetworkDiagram.svelte';
 	import MlpWorkedOperations from './MlpWorkedOperations.svelte';
@@ -99,9 +100,9 @@
 		manualWalk = false;
 		revealedStage = Math.max(0, Math.min(stages.length - 1, index));
 	}
+	let confirmingReset = $state(false);
 	function resetLaboratory() {
-		if (!window.confirm('¿Reiniciar el laboratorio? Se borrarán las respuestas de esta versión, pero no tu inscripción ni el registro de la versión anterior.')) return;
-		const cleared = clearDeepLearningProgress(session.getSnapshot().registration?.studentId ?? null);
+			const cleared = clearDeepLearningProgress(session.getSnapshot().registration?.studentId ?? null);
 		answers = {}; checkedAnswers = {}; attempts = {}; solutionRevealed = {}; revealedStage = 0; manualWalk = false; manualStep = 0;
 		resetNotice = cleared ? 'El laboratorio volvió al inicio.' : 'El laboratorio volvió al inicio, pero el navegador no permitió borrar el avance guardado.';
 	}
@@ -132,7 +133,8 @@
 	<p class="glossary-link">¿Necesitas un símbolo? <a href="#simbolos">Consulta la guía de símbolos</a>. Puedes usar punto o coma decimal; para la pérdida final escribe hasta cinco decimales.</p>
 	<div class="progress-head"><span>Tu avance</span><strong>{correctCount} de {fields.length} respuestas · {Math.round(correctCount / fields.length * 100)}%</strong></div>
 	<progress max={fields.length} value={correctCount} aria-label={`Progreso del laboratorio: ${correctCount} de ${fields.length} respuestas correctas`}></progress>
-	<div class="reset-row"><button class="reset-button" type="button" onclick={resetLaboratory} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<div class="reset-row"><button class="reset-button" type="button" onclick={() => (confirmingReset = true)} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<ConfirmDialog bind:open={confirmingReset} title="¿Reiniciar el laboratorio?" message="Se borrarán las respuestas de este laboratorio. Tu inscripción y los demás laboratorios no cambian." confirmLabel="Sí, reiniciar" cancelLabel="No, conservar mis respuestas" onConfirm={resetLaboratory} />
 
 	<div class="lab-workspace">
 	<div class="training-visual" aria-labelledby="training-visual-title">

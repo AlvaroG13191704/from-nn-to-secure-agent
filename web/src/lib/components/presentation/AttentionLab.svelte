@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import ConfirmDialog from '#lib/components/ConfirmDialog.svelte';
 	import { getLocalSession } from '#lib/state/session-context.js';
 	import ContextVectorPlot from '#lib/components/visualizations/language/ContextVectorPlot.svelte';
 	import { createLabProgressStore, type LabAnswers } from '#lib/state/lab-progress.js';
@@ -147,9 +148,9 @@
 	function goToStage(index: number) {
 		revealedStage = Math.max(0, Math.min(stages.length - 1, index));
 	}
+	let confirmingReset = $state(false);
 	function resetLaboratory() {
-		if (!window.confirm('¿Reiniciar el laboratorio de atención? Se borrarán solo tus respuestas de este laboratorio; tu inscripción y otros laboratorios no cambian.')) return;
-		const cleared = store.clear(studentId());
+			const cleared = store.clear(studentId());
 		answers = {}; checkedAnswers = {}; attempts = {}; solutionRevealed = {}; revealedStage = 0;
 		resetNotice = cleared ? 'El laboratorio volvió al inicio.' : 'El laboratorio volvió al inicio, pero el navegador no permitió borrar el avance guardado.';
 	}
@@ -189,7 +190,8 @@
 	</div>
 	<div class="progress-head"><span>Tu avance</span><strong>{correctCount} de {fields.length} respuestas · {Math.round(correctCount / fields.length * 100)}%</strong></div>
 	<progress max={fields.length} value={correctCount} aria-label={`Progreso del laboratorio: ${correctCount} de ${fields.length} respuestas correctas`}></progress>
-	<div class="reset-row"><button class="reset-button" type="button" onclick={resetLaboratory} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<div class="reset-row"><button class="reset-button" type="button" onclick={() => (confirmingReset = true)} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<ConfirmDialog bind:open={confirmingReset} title="¿Reiniciar el laboratorio?" message="Se borrarán solo tus respuestas del laboratorio de atención. Tu inscripción y los demás laboratorios no cambian." confirmLabel="Sí, reiniciar" cancelLabel="No, conservar mis respuestas" onConfirm={resetLaboratory} />
 
 	<div class="lab-workspace">
 		<div class="training-visual" aria-labelledby="attention-visual-title">
