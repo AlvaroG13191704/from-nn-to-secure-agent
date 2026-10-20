@@ -222,7 +222,7 @@
 			<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noreferrer">Model Context Protocol: el estándar para conectar agentes con herramientas</a></li>
 			<li><a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noreferrer">OWASP, «LLM01: Prompt Injection»</a></li>
 		</ul>
-		<a class="back-home" href="/">Volver a la introducción ↑</a>
+		<a class="back-home" href="/contacto">Continuar con la slide 5: contacto</a>
 	</div>
 </footer>
 </div>

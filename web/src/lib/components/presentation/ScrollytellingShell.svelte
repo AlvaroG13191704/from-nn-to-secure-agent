@@ -8,12 +8,13 @@
 	import TopicLearningSequence from './TopicLearningSequence.svelte';
 	import ChapterRail from '../navigation/ChapterRail.svelte';
 
-	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models' | 'agents'; children?: Snippet } = $props();
+	let { localSession, mode = 'introduction', children }: { localSession: LocalSessionController; mode?: 'introduction' | 'deep-learning' | 'language-models' | 'agents' | 'contact'; children?: Snippet } = $props();
 	const chapters = {
 		introduction: { number: 1, title: 'Introducción', previous: { href: '/', label: 'Introducción' } },
 		'deep-learning': { number: 2, title: 'Deep Learning', previous: { href: '/', label: 'Volver a la introducción' } },
 		'language-models': { number: 3, title: 'Lenguaje y LLMs', previous: { href: '/deep-learning', label: 'Volver a Deep Learning' } },
-		agents: { number: 4, title: 'Agentes', previous: { href: '/language-models', label: 'Volver a lenguaje y LLMs' } }
+		agents: { number: 4, title: 'Agentes', previous: { href: '/language-models', label: 'Volver a lenguaje y LLMs' } },
+		contact: { number: 5, title: 'Contacto', previous: { href: '/agents', label: 'Volver a Agentes' } }
 	};
 	const chapterNumber = $derived(chapters[mode].number);
 	const chapterTitle = $derived(chapters[mode].title);
@@ -32,12 +33,13 @@
 		{ id: panelIds[2], eyebrow: 'El taller', title: 'Conectemos fundamentos y aplicaciones.', copy: 'Durante dos sesiones de dos horas combinaremos explicaciones, demostraciones visuales y laboratorios guiados.' }
 	];
 
-	// The four slides of the workshop, in teaching order; the introduction is the current page.
+	// The five slides of the workshop, in teaching order; the introduction is the current page.
 	const workshopSlides = [
 		{ number: 1, session: 1, title: 'Introducción', href: undefined, detail: 'Estamos aquí: quién soy, cómo será el taller y siete ideas que conectan la IA con los agentes.' },
 		{ number: 2, session: 1, title: 'Deep Learning', href: '/deep-learning', detail: 'Cómo aprende una red neuronal: neuronas, capas y el ajuste de pesos a partir del error.' },
 		{ number: 3, session: 2, title: 'Lenguaje y LLMs', href: '/language-models', detail: 'Cómo una máquina lee y genera texto: tokens, embeddings y atención.' },
-		{ number: 4, session: 2, title: 'Agentes', href: '/agents', detail: 'Qué le falta a un LLM para actuar: herramientas, harness, RAG y límites de seguridad.' }
+		{ number: 4, session: 2, title: 'Agentes', href: '/agents', detail: 'Qué le falta a un LLM para actuar: herramientas, harness, RAG y límites de seguridad.' },
+		{ number: 5, session: 2, title: 'Contacto', href: '/contacto', detail: 'Dónde encontrarme para seguir aprendiendo: YouTube, Instagram, GitHub y LinkedIn.' }
 	];
 
 	function recordProgress(index: number) {
@@ -132,11 +134,11 @@
 
 {#if mode !== 'introduction'}
 	<div class="lesson-page">
-		<ChapterRail chapter={chapterNumber} title={chapterTitle} />
+		{#if mode !== 'contact'}<ChapterRail chapter={chapterNumber} title={chapterTitle} />{/if}
 		<main class="lesson-page__main">
 			<div class="deep-learning-topline">
 				<a class="back-link" href={previousChapter.href}>← {previousChapter.label}</a>
-				<span class="chapter-count">Slide {chapterNumber} de 4 · {chapterTitle}</span>
+				<span class="chapter-count">Slide {chapterNumber} de 5 · {chapterTitle}</span>
 			</div>
 			{@render children?.()}
 		</main>
@@ -350,7 +352,7 @@
 	.bio-item { padding-top: 1rem; border-top: 1px solid var(--color-line); }
 	.bio-item h2 { margin: 0; color: var(--color-ink); font-size: 1.35rem; font-weight: 600; }
 
-	/* Table of contents: the four slides are a real sequence, so they carry serif numerals. */
+	/* Table of contents: the five slides are a real sequence, so they carry serif numerals. */
 	.workshop-contents { min-width: 0; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid var(--color-line); border-radius: var(--radius-panel); background: var(--color-canvas); }
 	.workshop-contents h2 { margin: 0 0 0.5rem; color: var(--color-ink); font-size: clamp(1.35rem, 1.8vw, 1.75rem); font-weight: 600; }
 	.workshop-contents ol { display: grid; margin: 0; padding: 0; list-style: none; }

@@ -12,7 +12,8 @@
 		{ href: '/', number: 1, label: 'Introducción' },
 		{ href: '/deep-learning', number: 2, label: 'Deep Learning' },
 		{ href: '/language-models', number: 3, label: 'Lenguaje y LLMs' },
-		{ href: '/agents', number: 4, label: 'Agentes' }
+		{ href: '/agents', number: 4, label: 'Agentes' },
+		{ href: '/contacto', number: 5, label: 'Contacto' }
 	];
 	const currentSlide = $derived(slides.find((slide) => slide.href === page.url.pathname));
 
