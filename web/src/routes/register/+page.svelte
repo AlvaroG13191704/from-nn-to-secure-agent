@@ -144,9 +144,6 @@
 					</div>
 				</form>
 			{/if}
-			<p class="mt-7 border-t border-line pt-5 text-sm leading-relaxed text-muted">
-				La cantidad de personas activas que aparece en la navegación es una simulación visual y no representa participantes conectados.
-			</p>
 		</div>
 	</section>
 </main>
