@@ -5,6 +5,7 @@
 	import PerceptronWalkthrough from '#lib/components/visualizations/PerceptronWalkthrough.svelte';
 	import NonlinearLearningDemo from '#lib/components/visualizations/NonlinearLearningDemo.svelte';
 	import MlpLayerWalkthrough from '#lib/components/visualizations/MlpLayerWalkthrough.svelte';
+	import LossExplainer from '#lib/components/visualizations/LossExplainer.svelte';
 	import GradientDescent1D from '#lib/components/visualizations/GradientDescent1D.svelte';
 	import BackpropWalkthrough from '#lib/components/visualizations/BackpropWalkthrough.svelte';
 	import LossLandscape3D from '#lib/components/visualizations/LossLandscape3D.svelte';
@@ -217,6 +218,24 @@
 			<figcaption><b>Figura 2.7.</b> Las cuatro fases de cada paso de entrenamiento; al terminar la cuarta, el ciclo empieza otra vez.</figcaption>
 		</figure>
 	</div>
+	<div class="lesson__body">
+		<div class="lesson__text">
+			<h3 class="lesson__subhead">¿Qué es la pérdida?</h3>
+			<p>La <strong>pérdida</strong> es un solo número que dice qué tan equivocada está la red. Si vale 0, la predicción es perfecta; mientras más grande, peor. Entrenar significa buscar los pesos que la hacen lo más pequeña posible.</p>
+			<p>Para calcularla con una predicción <var>ŷ</var> y la respuesta esperada <var>y</var>:</p>
+			<ol class="reading-steps">
+				<li><strong>Medimos el error:</strong> <var>ŷ − y</var>. Con <var>ŷ = 6</var> y <var>y = 10</var>, el error es −4.</li>
+				<li><strong>Lo elevamos al cuadrado:</strong> <var>(−4)² = 16</var>. Así, fallar por arriba o por abajo cuesta lo mismo, y los errores grandes pesan mucho más: fallar por 4 cuesta cuatro veces más que fallar por 2.</li>
+				<li><strong>Tomamos la mitad:</strong> <var>L = ½ × 16 = 8</var>. El ½ solo simplifica las cuentas de más adelante; no cambia cuál predicción es mejor.</li>
+				<li><strong>Con varios ejemplos, promediamos</strong> sus pérdidas. Ese promedio es lo que el entrenamiento intenta bajar.</li>
+			</ol>
+			<div class="definition"><p><strong>Función de pérdida:</strong> la regla que elegimos para medir el error. Esta se llama <em>error cuadrático</em>: <var>L = ½(ŷ − y)²</var>. Para clasificar se usan otras, pero la idea es la misma: un número que baja cuando la red acierta.</p></div>
+		</div>
+		<figure class="lesson__figure">
+			<LossExplainer />
+			<figcaption><b>Figura 2.8.</b> Mueve la predicción: el error es la distancia hasta la respuesta esperada y la pérdida es la mitad del área del cuadrado.</figcaption>
+		</figure>
+	</div>
 </section>
 
 <section class="lesson" id="gradiente" data-lesson="Descenso de gradiente" data-number="2.7" aria-labelledby="gradiente-title">
@@ -234,7 +253,7 @@
 		</div>
 		<figure class="lesson__figure">
 			<GradientDescent1D />
-			<figcaption><b>Figura 2.8.</b> Un solo peso baja por la curva de pérdida. La recta negra es la pendiente en el punto actual.</figcaption>
+			<figcaption><b>Figura 2.9.</b> Un solo peso baja por la curva de pérdida. La recta negra es la pendiente en el punto actual.</figcaption>
 		</figure>
 	</div>
 	<div class="lesson__body">
@@ -248,7 +267,7 @@
 	<div class="lesson__body lesson__body--wide">
 		<figure class="lesson__figure">
 			<LossLandscape3D />
-			<figcaption><b>Figura 2.9.</b> Superficie de pérdida de dos pesos, calculada como el promedio de ocho ejemplos. Cada color de camino es un tipo de descenso de gradiente que parte del mismo punto.</figcaption>
+			<figcaption><b>Figura 2.10.</b> Superficie de pérdida de dos pesos, calculada como el promedio de ocho ejemplos. Cada color de camino es un tipo de descenso de gradiente que parte del mismo punto.</figcaption>
 		</figure>
 	</div>
 	<div class="next-question"><p>Desde el punto 1, el descenso por lotes se queda en el valle local, mientras que el ruido de SGD y la inercia de momentum llegan al valle profundo: ningún optimizador gana siempre. Pero queda un problema: medir la pendiente empujando cada peso por separado sería lentísimo con millones de pesos. ¿Cómo la obtenemos de todos a la vez?</p></div>
@@ -278,13 +297,13 @@
 				<p>Por la conexión de <var>w</var> entró <var>x = 2</var>: <var>señal de w = −4 × 2 = <strong>−8</strong></var>.</p>
 				<p class="single-check__result">Es el mismo −8 que medimos con el empujón, pero sin empujar nada: solo multiplicamos números que ya teníamos.</p>
 			</div>
-			<figcaption><b>Figura 2.10.</b> La receta aplicada al ejemplo de un solo peso.</figcaption>
+			<figcaption><b>Figura 2.11.</b> La receta aplicada al ejemplo de un solo peso.</figcaption>
 		</figure>
 	</div>
 	<div class="lesson__body lesson__body--wide">
 		<figure class="lesson__figure">
 			<BackpropWalkthrough />
-			<figcaption><b>Figura 2.11.</b> Backpropagation completo en una red pequeña: cada valor aparece donde se calcula, primero hacia adelante y después hacia atrás, hasta actualizar los siete parámetros.</figcaption>
+			<figcaption><b>Figura 2.12.</b> Backpropagation completo en una red pequeña: cada valor aparece donde se calcula, primero hacia adelante y después hacia atrás, hasta actualizar los siete parámetros.</figcaption>
 		</figure>
 	</div>
 	<div class="glossary-note key-idea"><p><strong>Para quien quiera ir más allá:</strong> en cálculo, la señal de ajuste se llama <em>derivada</em> y la receta se conoce como <em>regla de la cadena</em>. No necesitamos esos nombres para usarla.</p></div>
@@ -298,7 +317,7 @@
 		</div>
 		<figure class="lesson__figure">
 			<NonlinearLearningDemo />
-			<figcaption><b>Figura 2.12.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
+			<figcaption><b>Figura 2.13.</b> La misma red entrenada sobre diez puntos, con y sin activación en su capa oculta.</figcaption>
 		</figure>
 		<div class="next-question"><p>La demostración de diez puntos usa una red 2 → 8 → 1 y muchas actualizaciones. En el laboratorio usaremos una red más pequeña, 2 → 2 → 1: calcularás una rama representativa y verás cómo la misma regla completa la otra antes de actualizar la red.</p></div>
 	</div>
