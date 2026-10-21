@@ -24,7 +24,6 @@
 	]);
 </script>
 
-<button class="diagram-size" type="button" onclick={() => zoomed = !zoomed} aria-pressed={zoomed}>{zoomed ? 'Ajustar diagrama al ancho' : 'Ampliar diagrama para leer detalles'}</button>
 <!-- svelte-ignore a11y_no_noninteractive_tabindex (The region is keyboard-scrollable on narrow screens.) -->
 <div class="diagram-scroll" role="region" tabindex="0" aria-label="Diagrama MLP 2 a 2 a 1, desplazable horizontalmente">
 	<svg class:zoomed viewBox="0 0 1100 640" role="img" aria-labelledby="training-title training-description">

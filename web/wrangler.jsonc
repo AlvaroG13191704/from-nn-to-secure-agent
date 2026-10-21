@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "de-neuronas-a-agentes-seguros",
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	"compatibility_date": "2026-10-01",
+	"compatibility_flags": ["nodejs_als"],
+	"assets": { "binding": "ASSETS", "directory": ".svelte-kit/cloudflare" },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "agents-lab-budget",
+			// Replace with the id printed by `wrangler d1 create agents-lab-budget`.
+			"database_id": "457835c4-917d-4afb-83f3-94cf627a4412",
+			"migrations_dir": "migrations"
+		}
+	],
+	"vars": {
+		"GEMINI_MODEL": "gemini-3.8-flash",
+		// USD per million tokens; the introductory rate ends 2026-12-31.
+		"PRICE_INPUT_PER_MILLION": "0.75",
+		"PRICE_OUTPUT_PER_MILLION": "3.75"
+	}
+}

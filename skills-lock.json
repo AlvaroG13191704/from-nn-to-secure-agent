@@ -14,6 +14,12 @@
       "skillPath": "skills/diagram-animation/SKILL.md",
       "computedHash": "875808a72e79967c35c1743af1f98d9904d83b5f278e13f248b65d63b7baff2a"
     },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
     "gsap-frameworks": {
       "source": "greensock/gsap-skills",
       "sourceType": "github",

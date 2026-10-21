@@ -139,7 +139,7 @@
 
 <style>
 	.transformer-diagram { margin-top: 1.5rem; padding: clamp(1rem, 2.5vw, 1.75rem); border: 1px solid #d9e1eb; border-radius: 1rem; background: #f8fbff; }
-	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	h3 { margin: 0 0 .65rem; color: #17253a; font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
 	p { max-width: 76ch; color: #52627a; line-height: 1.6; }
 	.flow-controls { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0 .4rem; }
@@ -175,7 +175,7 @@
 	summary { color: #1d4ed8; font-weight: 800; cursor: pointer; }
 	@keyframes pulse { 50% { transform: scale(1.08); } }
 	.workspace { display: grid; gap: 1rem; }
-	.explanation-step { margin: 0 0 .2rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+	.explanation-step { margin: 0 0 .2rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	.connector { margin: -.2rem 0; }
 	@media (min-width: 900px) {
 		.workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 1.5rem; }

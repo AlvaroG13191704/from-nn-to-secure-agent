@@ -67,7 +67,7 @@
 
 <style>
 	.activation-explorer { margin-top: 1.5rem; padding: clamp(1rem, 2.5vw, 1.75rem); border: 1px solid #cbd5e1; border-radius: 1rem; background: #f8fbff; }
-	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.stage-label { margin: 0 0 .35rem; color: #0f766e; font-size: .78rem; font-weight: 800; }
 	.activation-explorer h3 { margin: 0 0 .65rem; color: #17253a; font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
 	.activation-explorer > p:not(.stage-label) { max-width: 76ch; color: #52627a; line-height: 1.6; }
 	.control-label { margin-bottom: .5rem; font-weight: 750; }

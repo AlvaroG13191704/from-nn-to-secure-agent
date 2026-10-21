@@ -1,0 +1,4 @@
+allowBuilds:
+  # Not needed: build, wrangler dev and vite dev work without these install scripts.
+  esbuild: false
+  workerd: false

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import ConfirmDialog from '#lib/components/ConfirmDialog.svelte';
 	import { getLocalSession } from '#lib/state/session-context.js';
 	import TrainingNetworkDiagram from '#lib/components/visualizations/TrainingNetworkDiagram.svelte';
 	import MlpWorkedOperations from './MlpWorkedOperations.svelte';
@@ -99,9 +100,9 @@
 		manualWalk = false;
 		revealedStage = Math.max(0, Math.min(stages.length - 1, index));
 	}
+	let confirmingReset = $state(false);
 	function resetLaboratory() {
-		if (!window.confirm('¿Reiniciar el laboratorio? Se borrarán las respuestas de esta versión, pero no tu inscripción ni el registro de la versión anterior.')) return;
-		const cleared = clearDeepLearningProgress(session.getSnapshot().registration?.studentId ?? null);
+			const cleared = clearDeepLearningProgress(session.getSnapshot().registration?.studentId ?? null);
 		answers = {}; checkedAnswers = {}; attempts = {}; solutionRevealed = {}; revealedStage = 0; manualWalk = false; manualStep = 0;
 		resetNotice = cleared ? 'El laboratorio volvió al inicio.' : 'El laboratorio volvió al inicio, pero el navegador no permitió borrar el avance guardado.';
 	}
@@ -132,7 +133,8 @@
 	<p class="glossary-link">¿Necesitas un símbolo? <a href="#simbolos">Consulta la guía de símbolos</a>. Puedes usar punto o coma decimal; para la pérdida final escribe hasta cinco decimales.</p>
 	<div class="progress-head"><span>Tu avance</span><strong>{correctCount} de {fields.length} respuestas · {Math.round(correctCount / fields.length * 100)}%</strong></div>
 	<progress max={fields.length} value={correctCount} aria-label={`Progreso del laboratorio: ${correctCount} de ${fields.length} respuestas correctas`}></progress>
-	<div class="reset-row"><button class="reset-button" type="button" onclick={resetLaboratory} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<div class="reset-row"><button class="reset-button" type="button" onclick={() => (confirmingReset = true)} disabled={!hydrated}>Reiniciar laboratorio</button>{#if resetNotice}<p role="status">{resetNotice}</p>{/if}</div>
+	<ConfirmDialog bind:open={confirmingReset} title="¿Reiniciar el laboratorio?" message="Se borrarán las respuestas de este laboratorio. Tu inscripción y los demás laboratorios no cambian." confirmLabel="Sí, reiniciar" cancelLabel="No, conservar mis respuestas" onConfirm={resetLaboratory} />
 
 	<div class="lab-workspace">
 	<div class="training-visual" aria-labelledby="training-visual-title">
@@ -197,7 +199,7 @@
 		box-shadow: var(--shadow-panel, 0 12px 32px rgb(23 37 58 / 8%));
 		scroll-margin-top: 5.75rem;
 	}
-	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+	.lab .eyebrow { margin: 0 0 .8rem; color: var(--color-accent, #0f766e); font-size: .82rem; font-weight: 800; }
 	.lab h2 { margin: 0 0 1rem; color: var(--color-ink, #17253a); font-size: clamp(1.7rem, 3.5vw, 2.75rem); line-height: 1.12; letter-spacing: -.03em; }
 	.lab > p:not(.eyebrow) { color: var(--color-muted, #52627a); line-height: 1.65; }
 	.glossary-link a { color: #1d4ed8; font-weight: 750; text-underline-offset: .15em; }
@@ -225,7 +227,7 @@
 	.carousel-status { color:#52627a; font-size:.85rem; font-weight:750; }
 	.lab-stage { margin-top:.6rem; border-top:1px solid #dbe4ee; padding:1.1rem 0 .5rem; animation:stage-enter .22s ease-out both; }
 	@keyframes stage-enter { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
-	.stage-label { margin-bottom:.35rem; color:#0f766e; font-size:.78rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+	.stage-label { margin-bottom:.35rem; color:#0f766e; font-size:.78rem; font-weight:800; }
 	.lab-stage h3 { margin-bottom:.65rem; }
 	.lab-stage > p:not(.stage-label) { max-width:75ch; }
 	.stage-guide { display:grid; gap:.65rem; margin:.85rem 0 1.1rem; }

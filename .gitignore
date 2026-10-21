@@ -1,3 +1,5 @@
 .agents
 .atl
 doc/**
+odd/
+.claude
