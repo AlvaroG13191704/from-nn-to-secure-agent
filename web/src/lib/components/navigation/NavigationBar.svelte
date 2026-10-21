@@ -29,7 +29,7 @@
 	onclick={(event) => { if (!(event.target as Element).closest('.slide-menu')) menuOpen = false; }}
 />
 
-<header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-surface/95 shadow-sm backdrop-blur">
+<header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-surface shadow-sm">
 	<nav class="mx-auto flex min-h-16 max-w-screen-2xl items-center justify-between gap-3 px-4 py-3 sm:px-6" aria-label="Navegación principal">
 		<a class="workshop-title rounded-md font-bold tracking-tight text-ink" href="/" aria-label="De Neuronas a Agentes Seguros, inicio">
 			De Neuronas a Agentes Seguros
