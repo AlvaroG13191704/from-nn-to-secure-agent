@@ -263,7 +263,7 @@
 	.practice-number { display: grid; width: 2rem; height: 2rem; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--color-ink); color: white; font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600; }
 
 	.sources ul { display: grid; gap: 0.65rem; padding-left: 1.25rem; }
-	.sources a { color: var(--color-primary); font-weight: 700; text-underline-offset: 0.18em; }
+	.sources a:not(.back-home) { color: var(--color-primary); font-weight: 700; text-underline-offset: 0.18em; }
 	.back-home { display: inline-block; padding: 0.75rem 1.1rem; border-radius: 0.4rem; background: var(--color-primary); color: white; font-weight: 800; text-decoration: none; }
 	.back-home:hover { background: #193fa8; }
 
