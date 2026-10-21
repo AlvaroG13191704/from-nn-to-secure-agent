@@ -4,6 +4,7 @@
 	import TokenizerPlayground from '#lib/components/visualizations/language/TokenizerPlayground.svelte';
 	import EmbeddingPlane from '#lib/components/visualizations/language/EmbeddingPlane.svelte';
 	import AttentionExplorer from '#lib/components/visualizations/language/AttentionExplorer.svelte';
+	import AttentionMathWalkthrough from '#lib/components/visualizations/language/AttentionMathWalkthrough.svelte';
 	import TransformerBlockDiagram from '#lib/components/visualizations/language/TransformerBlockDiagram.svelte';
 	import NextTokenSampler from '#lib/components/visualizations/language/NextTokenSampler.svelte';
 	import MultidimensionalEmbeddings from '#lib/components/visualizations/language/MultidimensionalEmbeddings.svelte';
@@ -241,6 +242,24 @@
 	</div>
 	<div class="lesson__body">
 		<div class="lesson__text">
+			<h3 class="subheading">¿De dónde salen estos porcentajes?</h3>
+			<p>Los porcentajes del mapa no son magia: salen de aplicar la receta con matrices. Voy a seguir la ecuación <var>softmax(Q·Kᵀ)·V</var> paso a paso, con los mismos números del mapa.</p>
+			<ol class="math-steps">
+				<li><strong>Q · Kᵀ:</strong> cada palabra se compara con todas las demás. El resultado es una tabla de puntajes.</li>
+				<li><strong>softmax:</strong> la fila de la consulta se convierte en porcentajes que suman 100 %. Son los del mapa.</li>
+				<li><strong>· V:</strong> cada vector aporta según su porcentaje, y la suma es el nuevo vector de la palabra.</li>
+			</ol>
+		</div>
+		<div class="key-idea"><p><strong>Elige la consulta.</strong> Cambia la frase o la palabra de consulta y vuelve a recorrer los pasos: los porcentajes del paso 7 serán los mismos que muestra el mapa para esa palabra.</p></div>
+	</div>
+	<div class="lesson__body lesson__body--wide">
+		<figure class="lesson__figure">
+			<AttentionMathWalkthrough />
+			<figcaption><b>Figura 3.11.</b> La atención calculada con matrices: puntajes Q·Kᵀ, softmax de la fila de la consulta y mezcla con V.</figcaption>
+		</figure>
+	</div>
+	<div class="lesson__body">
+		<div class="lesson__text">
 			<h3 class="subheading">¿Por qué la atención de un LLM es causal?</h3>
 			<p>Un LLM escribe de izquierda a derecha. Cuando predice lo que sigue a «La capital de», la palabra «Guatemala» todavía no existe: no tiene sentido mirarla. La <strong>máscara causal</strong> obliga a cada token a mirar solo hacia atrás, a sí mismo y a los anteriores.</p>
 			<div class="causal-reasons">
@@ -269,7 +288,7 @@
 					</tbody>
 				</table>
 			</div>
-			<figcaption><b>Figura 3.11.</b> La máscara causal para «La capital de Guatemala».</figcaption>
+			<figcaption><b>Figura 3.12.</b> La máscara causal para «La capital de Guatemala».</figcaption>
 		</figure>
 	</div>
 </section>
@@ -283,7 +302,7 @@
 		</div>
 		<figure class="lesson__figure">
 			<TransformerBlockDiagram />
-			<figcaption><b>Figura 3.12.</b> El recorrido de un token por un Transformer de solo decodificador.</figcaption>
+			<figcaption><b>Figura 3.13.</b> El recorrido de un token por un Transformer de solo decodificador.</figcaption>
 		</figure>
 		<details class="extension">
 			<summary>Para profundizar: ¿cómo sabe el modelo el orden de las palabras?</summary>
@@ -307,7 +326,7 @@
 		</div>
 		<figure class="lesson__figure lesson__figure--sticky">
 			<NextTokenSampler />
-			<figcaption><b>Figura 3.13.</b> Probabilidades del siguiente token y el efecto de la temperatura.</figcaption>
+			<figcaption><b>Figura 3.14.</b> Probabilidades del siguiente token y el efecto de la temperatura.</figcaption>
 		</figure>
 	</div>
 	<div class="lesson__body lesson__body--wide">
@@ -397,6 +416,8 @@
 	.qkv-grid h3 { margin: 0 0 0.3rem; color: var(--color-ink); font-size: 1rem; }
 	.qkv-grid p { margin: 0; color: var(--color-muted); font-size: 0.92rem; line-height: 1.5; }
 	.qkv-symbol { display: grid; width: 2.2rem; height: 2.2rem; margin-bottom: 0.5rem; place-items: center; border-radius: 0.4rem; background: var(--color-accent-soft); color: #0b4f45; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.2rem; font-weight: 800; }
+	.math-steps { display: grid; gap: 0.45rem; margin: 1rem 0 0; padding-left: 1.4rem; line-height: 1.5; list-style: decimal; }
+	.math-steps li::marker { color: var(--color-primary); font-family: var(--font-serif); font-weight: 600; }
 	.recipe { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
 	.recipe li { display: flex; gap: 0.9rem; align-items: center; padding: 0.7rem 0.9rem; border: 1px solid var(--color-line); border-radius: 0.5rem; }
 	.recipe span { display: grid; width: 1.9rem; height: 1.9rem; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--color-ink); color: white; font-family: var(--font-serif); font-weight: 600; }
