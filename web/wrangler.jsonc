@@ -10,7 +10,7 @@
 			"binding": "DB",
 			"database_name": "agents-lab-budget",
 			// Replace with the id printed by `wrangler d1 create agents-lab-budget`.
-			"database_id": "00000000-0000-0000-0000-000000000000",
+			"database_id": "457835c4-917d-4afb-83f3-94cf627a4412",
 			"migrations_dir": "migrations"
 		}
 	],
