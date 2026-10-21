@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import type { LocalSession } from '../../lib/state/local-session.js';
 	import { getLocalSession } from '../../lib/state/session-context.js';
+	import { clearWorkshopData } from '../../lib/state/clear-workshop-data.js';
+	import ConfirmDialog from '../../lib/components/ConfirmDialog.svelte';
 
 	const localSession = getLocalSession();
 	let currentSession = $state<LocalSession>({ registration: null, progress: 0 });
@@ -10,6 +12,8 @@
 	let errors = $state<{ name?: string; studentId?: string }>({});
 	let editing = $state(false);
 	let statusMessage = $state('');
+	let confirmingClear = $state(false);
+	let clearMessage = $state('');
 
 	onMount(() => {
 		localSession.hydrate();
@@ -49,6 +53,20 @@
 		studentId = '';
 		editing = false;
 		statusMessage = 'Tus datos se guardaron en este navegador.';
+	}
+
+	function clearEverything() {
+		let local: Storage | undefined;
+		let session: Storage | undefined;
+		try { local = window.localStorage; session = window.sessionStorage; } catch { /* storage blocked */ }
+		const removed = clearWorkshopData(local, session);
+		localSession.reset();
+		name = '';
+		studentId = '';
+		editing = false;
+		errors = {};
+		clearMessage = removed > 0 ? 'Listo: borramos tu inscripción y todo el avance de este navegador.' : 'No había datos del taller guardados en este navegador.';
+		statusMessage = clearMessage;
 	}
 
 	function beginEditing() {
@@ -144,6 +162,17 @@
 					</div>
 				</form>
 			{/if}
+
+			<div class="mt-8 space-y-3 border-t border-line pt-6">
+				<h2 class="text-lg font-bold text-ink">Borrar mis datos</h2>
+				<p class="text-sm leading-relaxed text-muted">Elimina de este navegador tu nombre, tu carnet, el avance de todos los laboratorios, los resultados de las misiones y el código del taller. Úsalo si estás en una computadora compartida.</p>
+				<button class="rounded-lg border border-red-700 px-5 py-3 font-semibold text-red-700 hover:bg-red-50" type="button" onclick={() => (confirmingClear = true)}>
+					Borrar todos mis datos
+				</button>
+				{#if clearMessage}<p class="text-sm font-semibold text-success">{clearMessage}</p>{/if}
+				<p class="text-xs leading-relaxed text-muted">El gasto del laboratorio de agentes se lleva en el servidor para respetar el presupuesto del taller; borrar tus datos aquí no lo reinicia.</p>
+			</div>
 		</div>
 	</section>
+	<ConfirmDialog bind:open={confirmingClear} title="¿Borrar todos tus datos?" message="Se borrarán tu inscripción y el avance de todos los laboratorios guardados en este navegador. No se puede deshacer." confirmLabel="Sí, borrar todo" cancelLabel="No, conservarlos" onConfirm={clearEverything} />
 </main>

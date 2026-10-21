@@ -61,6 +61,10 @@ export function createLocalSession() {
 		},
 		setRegistration(registration: Registration | null) {
 			persist({ ...get(session), registration });
+		},
+		/** Forget the session in memory after its stored record was removed. */
+		reset() {
+			session.set(initialSession);
 		}
 	};
 }
