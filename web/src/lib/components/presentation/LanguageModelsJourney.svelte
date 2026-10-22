@@ -195,6 +195,7 @@
 					<article><span class="qkv-symbol">{item.symbol}</span><h3>{item.name}</h3><p>{item.detail}</p></article>
 				{/each}
 			</div>
+			<p class="qkv-origin">¿De dónde salen q, k y v? Cada palabra tiene un solo vector, y el modelo lo multiplica por tres matrices de pesos distintas, <var>W<sub>Q</sub></var>, <var>W<sub>K</sub></var> y <var>W<sub>V</sub></var>. Son pesos que aprende al entrenar, igual que los de la slide 2: con ellos decide qué preguntar, qué ofrecer y qué información entregar.</p>
 			<ol class="recipe" aria-label="Receta de la atención en tres pasos">
 				<li><span>1</span><p><strong>Puntaje:</strong> q · k para cada token.</p></li>
 				<li><span>2</span><p><strong>Porcentajes:</strong> softmax de los puntajes.</p></li>
@@ -245,12 +246,13 @@
 			<h3 class="subheading">¿De dónde salen estos porcentajes?</h3>
 			<p>Los porcentajes del mapa no son magia: salen de aplicar la receta con matrices. Voy a seguir la ecuación <var>softmax(Q·Kᵀ)·V</var> paso a paso, con los mismos números del mapa.</p>
 			<ol class="math-steps">
+				<li><strong>Q, K y V:</strong> cada palabra se multiplica por tres matrices de pesos y obtiene su versión para preguntar, para ofrecerse y con su contenido.</li>
 				<li><strong>Q · Kᵀ:</strong> cada palabra se compara con todas las demás. El resultado es una tabla de puntajes.</li>
 				<li><strong>softmax:</strong> la fila de la consulta se convierte en porcentajes que suman 100 %. Son los del mapa.</li>
 				<li><strong>· V:</strong> cada vector aporta según su porcentaje, y la suma es el nuevo vector de la palabra.</li>
 			</ol>
 		</div>
-		<div class="key-idea"><p><strong>Elige la consulta.</strong> Cambia la frase o la palabra de consulta y vuelve a recorrer los pasos: los porcentajes del paso 7 serán los mismos que muestra el mapa para esa palabra.</p></div>
+		<div class="key-idea"><p><strong>Elige la consulta.</strong> Cambia la frase o la palabra de consulta y vuelve a recorrer los pasos: los porcentajes del paso 8 serán los mismos que muestra el mapa para esa palabra.</p></div>
 	</div>
 	<div class="lesson__body lesson__body--wide">
 		<figure class="lesson__figure">
@@ -416,6 +418,7 @@
 	.qkv-grid h3 { margin: 0 0 0.3rem; color: var(--color-ink); font-size: 1rem; }
 	.qkv-grid p { margin: 0; color: var(--color-muted); font-size: 0.92rem; line-height: 1.5; }
 	.qkv-symbol { display: grid; width: 2.2rem; height: 2.2rem; margin-bottom: 0.5rem; place-items: center; border-radius: 0.4rem; background: var(--color-accent-soft); color: #0b4f45; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.2rem; font-weight: 800; }
+	.qkv-origin { margin: 1rem 0 0; line-height: 1.6; }
 	.math-steps { display: grid; gap: 0.45rem; margin: 1rem 0 0; padding-left: 1.4rem; line-height: 1.5; list-style: decimal; }
 	.math-steps li::marker { color: var(--color-primary); font-family: var(--font-serif); font-weight: 600; }
 	.recipe { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }

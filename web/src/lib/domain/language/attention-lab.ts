@@ -21,6 +21,34 @@ export function attentionMatrix(vectors: Vector[], causal: boolean) {
 	});
 }
 
+export type Matrix2 = [[number, number], [number, number]];
+
+/**
+ * W_Q, W_K and W_V for the attention map and its walkthrough. A real model learns them during training; these were
+ * chosen by hand so the story holds («banco» looks at «río» or «dinero») and attention is not symmetric.
+ */
+export const ATTENTION_PROJECTIONS: { query: Matrix2; key: Matrix2; value: Matrix2 } = {
+	query: [[1, 0], [0.5, 1]],
+	key: [[1, 0], [0, 1.5]],
+	value: [[1, 0], [0, 2]]
+};
+
+/** Row vector times a 2×2 matrix: x · W. */
+export function project(vector: Vector, matrix: Matrix2): [number, number] {
+	return [vector[0] * matrix[0][0] + vector[1] * matrix[1][0], vector[0] * matrix[0][1] + vector[1] * matrix[1][1]];
+}
+
+/** Attention map with Q = X·W_Q and K = X·W_K. In causal attention a token cannot look at later tokens. */
+export function projectedAttentionMatrix(vectors: Vector[], causal: boolean, projections = ATTENTION_PROJECTIONS) {
+	const queries = vectors.map((vector) => project(vector, projections.query));
+	const keys = vectors.map((vector) => project(vector, projections.key));
+	return queries.map((query, row) => {
+		const visible = causal ? keys.slice(0, row + 1) : keys;
+		const weights = softmax(visible.map((key) => dot(query, key)));
+		return keys.map((_, column) => weights[column] ?? 0);
+	});
+}
+
 // Toy 2D vectors: dimension 1 ≈ "outdoors/nature", dimension 2 ≈ "money". In this exercise k = v = the token vector.
 export const ATTENTION_MEANINGS = {
 	seat: { label: 'asiento', vector: [2, 1] as [number, number] },
