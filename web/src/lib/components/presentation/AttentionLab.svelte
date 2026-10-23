@@ -177,7 +177,7 @@
 	<p class="eyebrow">08 · Laboratorio</p>
 	<h2 id="attention-lab-title">Calcula la atención a mano</h2>
 	<p>Vamos a seguir con números cómo la palabra “banco” decide a qué vecinas prestar atención. Tú calcularás una frase representativa, “{river.text}”; la otra frase, “{money.text}”, se completará con la misma regla para que compares los resultados.</p>
-	<p class="glossary-link">Cada palabra es un vector de dos números: el primero indica “naturaleza / aire libre” y el segundo indica “dinero”. En este ejercicio la clave k y el valor v de cada palabra son su mismo vector. Puedes usar punto o coma decimal.</p>
+	<p class="glossary-link">Cada palabra es un vector de dos números: el primero indica “naturaleza / aire libre” y el segundo indica “dinero”. Para que la cuenta se pueda hacer a mano, aquí las tres matrices W<sub>Q</sub>, W<sub>K</sub> y W<sub>V</sub> son la identidad: q, k y v de cada palabra son su mismo vector. En la figura 3.11 viste matrices distintas; el procedimiento es el mismo. Puedes usar punto o coma decimal.</p>
 	<div class="lab-formula" aria-labelledby="lab-formula-title">
 		<p id="lab-formula-title" class="formula-title">La ecuación que vas a calcular</p>
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets students scroll the equation on narrow screens.) -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { attentionMatrix, EXPLORER_SENTENCES } from '#lib/domain/language/attention-lab.js';
+	import { projectedAttentionMatrix, EXPLORER_SENTENCES } from '#lib/domain/language/attention-lab.js';
 
 	const COLUMN = 96;
 	const BASE_Y = 150;
@@ -10,7 +10,7 @@
 
 	const sentence = $derived(EXPLORER_SENTENCES.find((item) => item.id === sentenceId) ?? EXPLORER_SENTENCES[0]);
 	const tokens = $derived(sentence.tokens);
-	const matrix = $derived(attentionMatrix(tokens.map((token) => token.vector), causal));
+	const matrix = $derived(projectedAttentionMatrix(tokens.map((token) => token.vector), causal));
 	const weights = $derived(matrix[Math.min(queryIndex, tokens.length - 1)] ?? []);
 	const queryWord = $derived(tokens[queryIndex]?.word ?? '');
 	const width = $derived(tokens.length * COLUMN);
@@ -61,7 +61,7 @@
 <section class="attention-explorer" aria-labelledby="attention-explorer-title">
 	<p class="stage-label">Mapa de atención interactivo</p>
 	<h3 id="attention-explorer-title">¿A quién mira «banco»?</h3>
-	<p>Voy a tomar una palabra como <strong>consulta</strong> y medir cuánto se parece a cada palabra de la frase. Los arcos más gruesos indican más atención. Haz clic en cualquier palabra para convertirla en la consulta.</p>
+	<p>Voy a tomar una palabra como <strong>consulta</strong> y comparar su <var>q</var> con la <var>k</var> de cada palabra de la frase. Los arcos más gruesos indican más atención. Haz clic en cualquier palabra para convertirla en la consulta.</p>
 
 	<div class="controls">
 		<div class="toggle-group" role="group" aria-label="Frase de ejemplo">
